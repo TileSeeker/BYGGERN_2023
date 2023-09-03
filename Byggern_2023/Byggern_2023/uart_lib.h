@@ -19,6 +19,7 @@ void uart_init(void);				//Set Baudrate, Enable Tx and Rx, Configure Frame
 void uart_send_byte(char data);	
 void uart_send_string(char* str);
 char uart_read_byte(void);		
+int uart_send_byte_printf(char var, FILE *stream);
 
 //Declare FIFO functions
 void init_fifo(struct FIFO* fifo_object, char* array, uint16_t size);

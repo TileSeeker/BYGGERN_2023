@@ -10,6 +10,7 @@
 #include <avr/interrupt.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "uart_lib.h"
 #define F_CPU 16000000UL
@@ -24,6 +25,10 @@ struct FIFO fifo_rx;
 char uart_tx_buffer[buffer_size];
 struct FIFO fifo_tx;
 
+//Configure stdio output stream
+//static FILE mystdout = FDEV_SETUP_STREAM(uart_send_byte(), NULL, _FDEV_SETUP_WRITE);
+static FILE mystdout = FDEV_SETUP_STREAM(uart_send_byte_printf, NULL, _FDEV_SETUP_WRITE);
+
 /*
 struct FIFO{
 	char *buffer;
@@ -35,9 +40,6 @@ struct FIFO{
 
 
 void uart_init(void){
-	//Enable Global Interrupt
-	//sei();
-	
 	//Configure baud rate
 	UBRR0H = (unsigned char)(MYUBBR >> 8);
 	UBRR0L = (unsigned char)(MYUBBR);
@@ -70,24 +72,38 @@ void uart_init(void){
 					(3<<UCSZ00)	|	//8-bit Frame size
 					(0<<UCPOL0);	//UCPOL Not available in UART mode
 					
-					
-	//Init UART buffers
-	struct FIFO fifo_rx;
+	//struct FIFO fifo_rx;
 	init_fifo(&fifo_rx, uart_rx_buffer, buffer_size);
 	
-	struct FIFO fifo_tx;
+	//struct FIFO fifo_tx;
 	init_fifo(&fifo_tx, uart_tx_buffer, buffer_size);
+
+	//fdevopen(&uart_send_byte, &uart_read_byte);
+	
+	//Enable Global Interrupt
+	sei();
+	//printf("Hello");
 }
 
 void uart_send_byte(char data){
-	while (!(UCSR0A & (1 << UDRE0)));
-	UDR0 = data;
+	if (UCSR0A & (1<<UDRE0)){ //If Transmit Register is empty-> Load data to TXR
+		UDR0 = data;
+	}
+	else{ //IF TX Register is not empty -> store the data in fifo.
+		fifo_push(&fifo_tx, data);
+	}
 }
+
+int uart_send_byte_printf(char var, FILE *stream){
+    if (var == '\n') uart_send_byte('\r');
+    uart_send_byte(var);
+    return 0;
+}
+
 
 void uart_send_string(char* str){
 	int length = strlen(str);
-	for (int i=0; i<length;i++)
-	{
+	for (int i=0; i<length;i++){
 		uart_send_byte(str[i]);
 	}
 }
@@ -102,6 +118,11 @@ ISR (USART0_RXC_vect){
 	fifo_push(&fifo_rx, data);
 }
 
+ISR (USART0_TXC_vect){
+	if (!(fifo_empty(&fifo_tx))){
+		UDR0 = fifo_pop(&fifo_tx);
+	}
+}
 
 	
 void init_fifo(struct FIFO* fifo_object, char* array, uint16_t size){
