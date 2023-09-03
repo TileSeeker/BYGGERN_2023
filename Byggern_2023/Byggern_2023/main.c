@@ -1,36 +1,31 @@
-/*
- * Byggern_2023.c
- *
- * Created: 31-Aug-23 2:03:29 PM
- * Author : peter
- */ 
-
 #include <avr/io.h>
 
-#define F_CPU 16000000UL
+#define F_CPU 4915200UL //4.9152MHz
 #include <util/delay.h>
 #include <stdio.h>
-
 #include "uart_lib.h"
 
 
 
 int main(void)
 {
-    /* Replace with your application code */
-	uart_init();
-	char s[] = "Hello World\n";
-	DDRB = 0x1;
-    while (1) 
-    {
-		//uart_send_byte(s[0]);
-		printf("Hello!");
-		_delay_ms(100);
-		
-		//PORTB = 0x01;
-		//_delay_ms(20);
-		//PORTB = 0x00;
-		//_delay_ms(20);	
-    }
+    UART_init();
+	//Enable global interrupts
+	sei();
+	stdout = &uart_stream;
+	
+	//LED
+	DDRA |= (1 << PA0);	//Configure PA0 as output
+	PORTA |= (1 << PA0); //PA0 -> D1 high
+	PORTA &= ~(1 << PA0); //PA0 -> D1 low
+	
+	
+	while(1) {
+		//UART testing:
+		//printf("Hello World \n Test");
+		//char recived = UART_recive();
+		//_delay_ms(10);
+		//printf("%c", recived);
+	}
 }
 	
