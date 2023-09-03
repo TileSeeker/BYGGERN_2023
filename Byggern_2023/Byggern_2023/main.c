@@ -13,13 +13,11 @@
 #include "uart_lib.h"
 
 
-
-
 int main(void)
 {
     /* Replace with your application code */
 	uart_init();
-	char s[] = "Hello World";
+	char s[] = "Hello World\n";
 	DDRB = 0x1;
     while (1) 
     {
@@ -31,10 +29,5 @@ int main(void)
 		//PORTB = 0x00;
 		//_delay_ms(20);	
     }
-}
-
-void uart_send_byte(uint8_t data){
-	while (!(UCSR0A & (1 << UDRE0)));
-	UDR0 = data;
 }
 	

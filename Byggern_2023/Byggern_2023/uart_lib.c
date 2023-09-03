@@ -9,14 +9,35 @@
 #include <stdbool.h>
 #include <avr/interrupt.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "uart_lib.h"
 #define F_CPU 16000000UL
 #define BAUD_RATE 9800
 #define MYUBBR (F_CPU/16/BAUD_RATE-1)
 
+//FIFO Declarations
+#define buffer_size 50
+char uart_rx_buffer[buffer_size];
+struct FIFO fifo_rx;
+
+char uart_tx_buffer[buffer_size];
+struct FIFO fifo_tx;
+
+/*
+struct FIFO{
+	char *buffer;
+	uint16_t size;
+	uint16_t head;
+	uint16_t tail;
+};
+*/
+
 
 void uart_init(void){
+	//Enable Global Interrupt
+	//sei();
+	
 	//Configure baud rate
 	UBRR0H = (unsigned char)(MYUBBR >> 8);
 	UBRR0L = (unsigned char)(MYUBBR);
@@ -32,9 +53,9 @@ void uart_init(void){
 					(0<<MPCM0);		//Multi-processor Communication Mode Disabled
 	
 	//Configure Control andStatus Register B
-	UCSR0B = 0x00|	(1<<RXCIE0)	|	//RX Complete Enable
-					(1<<TXCIE0)	|	//TX Complete Enable
-					(1<<UDRIE0)	|	//DATA-REGISTER-EMPTY interrupt Enable
+	UCSR0B = 0x00|	(1<<RXCIE0)	|	//RX Complete Interrupt Enable
+					(1<<TXCIE0)	|	//TX Complete Interrupt Enable
+					(1<<UDRIE0)	|	//DATA-REGISTER-EMPTY Interrupt Enable
 					(1<<RXEN0)	|	//RX enabled
 					(1<<TXEN0)	|	//TX enabled
 					(0<<UCSZ02)	|	//8-bit Frame size
@@ -49,4 +70,82 @@ void uart_init(void){
 					(3<<UCSZ00)	|	//8-bit Frame size
 					(0<<UCPOL0);	//UCPOL Not available in UART mode
 					
+					
+	//Init UART buffers
+	struct FIFO fifo_rx;
+	init_fifo(&fifo_rx, uart_rx_buffer, buffer_size);
+	
+	struct FIFO fifo_tx;
+	init_fifo(&fifo_tx, uart_tx_buffer, buffer_size);
 }
+
+void uart_send_byte(char data){
+	while (!(UCSR0A & (1 << UDRE0)));
+	UDR0 = data;
+}
+
+void uart_send_string(char* str){
+	int length = strlen(str);
+	for (int i=0; i<length;i++)
+	{
+		uart_send_byte(str[i]);
+	}
+}
+
+
+char uart_read_byte(void){
+	return fifo_pop(&fifo_rx);
+}
+
+ISR (USART0_RXC_vect){
+	char data = UDR0;
+	fifo_push(&fifo_rx, data);
+}
+
+
+	
+void init_fifo(struct FIFO* fifo_object, char* array, uint16_t size){
+	fifo_object->buffer = array;
+	fifo_object->size = size;
+	fifo_object->head = 0;
+	fifo_object->tail = 0;
+	
+}
+
+bool fifo_full(struct FIFO* fifo_object){
+	bool buffer_is_full = false;
+	if (fifo_object->head == fifo_object->size){
+		buffer_is_full = true;
+	}
+	return buffer_is_full;
+}
+
+bool fifo_empty(struct FIFO* fifo_object){
+	bool buffer_is_empty = false;
+	if (fifo_object->head == 0){
+		buffer_is_empty = true;
+	}
+	return buffer_is_empty;
+}
+
+void fifo_push(struct FIFO* fifo_object, char data){
+	if (!(fifo_full(fifo_object))){
+		fifo_object->buffer[fifo_object->head] = data;
+		fifo_object->head++;
+	}
+}
+
+char fifo_pop(struct FIFO* fifo_object){
+	char data = 0;
+	if (!(fifo_empty(fifo_object))){
+		data = fifo_object->buffer[fifo_object->tail];
+		fifo_object->tail++;
+
+		if (fifo_object->tail == fifo_object->head){
+			fifo_object->tail = 0;
+			fifo_object->head = 0;
+		}
+	}
+	return data;
+}
+
