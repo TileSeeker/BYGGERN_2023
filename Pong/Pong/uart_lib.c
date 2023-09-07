@@ -68,7 +68,7 @@ void uart_init(void){
 	UCSR0C = 0x00|	(1<<URSEL0)	|	//URSEL0 set to 1 to write to UCSR0C
 					(0<<UMSEL0)	|	//Asynchronous Operation
 					(0<<UPM00)	|	//Parity Mode Disabled
-					(0<<USBS0)	|	//1-bit stop bit
+					(1<<USBS0)	|	//2-bit stop bit
 					(3<<UCSZ00)	|	//8-bit Frame size
 					(0<<UCPOL0);	//UCPOL Not available in UART mode
 					

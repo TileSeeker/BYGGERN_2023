@@ -10,6 +10,7 @@
 #define F_CPU 4915200UL
 #include <util/delay.h>
 #include <stdio.h>
+#include <avr/interrupt.h>
 
 #include "uart_lib.h"
 
@@ -18,8 +19,8 @@
 int main(void)
 {
 	uart_init();
-	char s[] = "Hello World\n";
-	sei();
+	char s[] = "Hello World";
+	//sei();
     while (1){
 		uart_send_byte(s[0]);
 		//printf("Hello!");
