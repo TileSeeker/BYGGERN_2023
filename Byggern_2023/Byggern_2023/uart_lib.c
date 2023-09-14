@@ -7,22 +7,10 @@
 #define BAUD_PRESCALE ((F_CPU / (BAUD * 16UL)) - 1)
 volatile uint8_t transmissionComplete = 1;
 
-void UART_init() {
-	//Set baud rate
-	UBRR0H = (BAUD_PRESCALE >> 8);
-	UBRR0L = BAUD_PRESCALE;
-	
-	//Enable receiver and transmitter + TX complete interrupt
-	UCSR0B = (1 << RXEN0) | (1 << TXEN0) | (1 << TXCIE0);
-	
-	//Set frame format: 8-bit data, stop bit = 2_bit
-	UCSR0C = (1 << URSEL0) | (1 << USBS0) | (1 << UCSZ01) | (1 << UCSZ00); //UCSZ10 -> UCSZ01
-}
-
 static int UART_transmit(char message, FILE *stream) {
 	//Wait for prev transmission to complete
 	while (!transmissionComplete);
-	//Set TX complete flag to indicate busy
+	//Set TXC flag to indicate busy
 	transmissionComplete = 0;
 	
 	//Put data into UDR buffer, sends the data
@@ -30,7 +18,6 @@ static int UART_transmit(char message, FILE *stream) {
 	if (message == '\n') {
 		UART_transmit('\r', stream);
 	}
-
 	return 0;
 }
 
@@ -42,11 +29,22 @@ char UART_recive() {
 	return UDR0;
 }
 
+void UART_init() {
+	//Set baud rate
+	UBRR0H = (BAUD_PRESCALE >> 8);
+	UBRR0L = BAUD_PRESCALE;
+	
+	//Enable receiver and transmitter + TX complete interrupt
+	UCSR0B |= (1 << RXEN0) | (1 << TXEN0) | (1 << TXCIE0);
+	
+	//Set frame format: 8-bit data, stop bit = 2_bit
+	UCSR0C |= (1 << URSEL0) | (1 << USBS0) | (1 << UCSZ01) | (1 << UCSZ00); //UCSZ10 -> UCSZ01
+	
+	fdevopen(&UART_transmit, &UART_recive);
+}
+
 //UART transmission complete interrupt handler
 ISR(USART0_TXC_vect) {
 	//Set flag to indicate completion
 	transmissionComplete = 1;
 }
-
-//Set stdout to use custom transmit function
-static FILE uart_stream = FDEV_SETUP_STREAM(UART_transmit, NULL, _FDEV_SETUP_WRITE); //https://www.nongnu.org/avr-libc/user-manual/group__avr__stdio.html

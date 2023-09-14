@@ -1,8 +1,5 @@
 #pragma once
 
-#include <stdbool.h>
-
-
-void UART_init();
+void UART_init(void);
 static int UART_transmit(char message, FILE *stream);
-char UART_recive();
+char UART_recive(void);
