@@ -1,8 +1,6 @@
-#include <stdio.h>
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#define F_CPU 4915200UL //4.9152MHz
+#include "uart_lib.h"
 
+#define F_CPU 4915200UL //4.9152MHz
 #define BAUD 9600
 #define BAUD_PRESCALE ((F_CPU / (BAUD * 16UL)) - 1)
 volatile uint8_t transmissionComplete = 1;

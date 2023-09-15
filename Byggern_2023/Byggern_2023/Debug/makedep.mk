@@ -8,6 +8,8 @@ joystick_lib.c
 
 main.c
 
+slider_lib.c
+
 uart_lib.c
 
 xmem.c

@@ -1,7 +1,4 @@
-#include <avr/io.h>
-#include <stdlib.h>
-
-#define  BASE_ADDRESS 0x1000
+#include "xmem.h"
 
 void XMEM_init(void) {
 	MCUCR |= (1 << SRE);	//Enable SRAM
