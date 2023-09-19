@@ -80,6 +80,38 @@ Discarded input sections
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
+ .text          0x00000000        0x0 oled_lib.o
+ .data          0x00000000        0x0 oled_lib.o
+ .bss           0x00000000        0x0 oled_lib.o
+ .text.write_oled_command
+                0x00000000        0x6 oled_lib.o
+ .text.write_oled_data
+                0x00000000        0x6 oled_lib.o
+ .text.oled_init
+                0x00000000       0x80 oled_lib.o
+ .text.oled_reset
+                0x00000000        0x2 oled_lib.o
+ .text.oled_home
+                0x00000000        0x2 oled_lib.o
+ .text.oled_goto_line
+                0x00000000        0x2 oled_lib.o
+ .text.oled_goto_column
+                0x00000000        0x2 oled_lib.o
+ .text.oled_clear_line
+                0x00000000        0x2 oled_lib.o
+ .text.oled_pos
+                0x00000000        0x2 oled_lib.o
+ .text.oled_print
+                0x00000000        0x2 oled_lib.o
+ .debug_info    0x00000000      0x3a7 oled_lib.o
+ .debug_abbrev  0x00000000       0xe2 oled_lib.o
+ .debug_aranges
+                0x00000000       0x68 oled_lib.o
+ .debug_ranges  0x00000000       0x58 oled_lib.o
+ .debug_line    0x00000000      0x1b5 oled_lib.o
+ .debug_str     0x00000000      0x235 oled_lib.o
+ .comment       0x00000000       0x31 oled_lib.o
+ .debug_frame   0x00000000       0xb4 oled_lib.o
  .text          0x00000000        0x0 slider_lib.o
  .data          0x00000000        0x0 slider_lib.o
  .bss           0x00000000        0x0 slider_lib.o
@@ -365,6 +397,7 @@ LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/
 LOAD adc_lib.o
 LOAD joystick_lib.o
 LOAD main.o
+LOAD oled_lib.o
 LOAD slider_lib.o
 LOAD uart_lib.o
 LOAD xmem.o
