@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -21,6 +22,7 @@
 
 int main(void)
 {
+
 	sei();  //Enable global interrupts	
 	UART_init();
 	XMEM_init();
@@ -29,6 +31,7 @@ int main(void)
 	while(1) {
 		//ADC & joystick test
 		//printf("ADC: x: %d\t y: %d\t dir-x: %d\t dir-y: %d \n\n", joystick_position_read().x_pos, joystick_position_read().y_pos, joystick_direction_read().x_dir, joystick_direction_read().y_dir);
+
 		
 		//Slider test
 		printf("Slider: %d \n\n", read_slider_position(channel_2));
