@@ -153,6 +153,9 @@
     <Compile Include="adc_lib.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="fonts.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="joystick_lib.c">
       <SubType>compile</SubType>
     </Compile>
