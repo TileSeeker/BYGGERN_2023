@@ -3,6 +3,8 @@
 #include <avr/interrupt.h>
 #include "uart_lib.h"
 #include "xmem.h"
+#include "adc_lib.h"
+#include "OLED_Lib.h"
 
 #define F_CPU 4915200UL //4.9152MHz
 #include <util/delay.h>
@@ -15,6 +17,7 @@ int main(void)
 	sei();
 	UART_init();
 	XMEM_init();
+	adc_offset_callibrate();
 	//SRAM_test();
 			
 	//LED test
@@ -35,11 +38,27 @@ int main(void)
 		
 	while(1) {
 		//ADC test
-		volatile char *adc = (char *) 0x1400; //ADC start address
-		adc[0] = 0x04; //Output of channel 1
-		uint8_t value = adc[0]; //8 bit value
-		printf("ADC: %02X\n\n", value);
+		//volatile char *adc = (char *) 0x1400; //ADC start address
+		
+		//adc[0] = 0x04;
+		//adc[0] = 0x00; //measure all channels
+		//_delay_ms(1);
+		//uint8_t x_pos = adc[0x00]; //Read Ch 0
+		//uint8_t y_pos = adc[0x01]; //Read Ch 1
+		
+		//_delay_ms(1);
+		//adc[0] = 0x80; 
+		//_delay_ms(200);
+		
+		
+		//printf("ADC: x:%02i\t y:%02i \n\n", x_pos, y_pos);
+		//printf("ADC: x:%02X\t y:%02X \n\n", read_channel(channel_0), read_channel(channel_1));
+		printf("ADC: x:%i\t y:%i \n\n", read_angle(channel_0), read_angle(channel_1));
+		printf("ADC: x:%s\t y:%s \n\n", read_dirrection(channel_0), read_dirrection(channel_1));
 		_delay_ms(200);
+		
+		
+		
 		
 		//NAND test
 		//XMEM_write(1, 0x401);
@@ -54,4 +73,3 @@ int main(void)
 		//printf("%c", recived);
 	}
 }
-
