@@ -34,6 +34,8 @@ void oled_init(void) {
 	write_oled_command(0xA4); //out follows RAM content
 	write_oled_command(0xA6); //set normal display
 	write_oled_command(0xAF); //display on
+	
+	fdevopen(&oled_print, NULL);
 }
 
 void oled_goto_line(uint8_t line) {
@@ -71,16 +73,26 @@ void oled_set_brigthness(uint8_t lvl) {
 	write_oled_command(lvl);
 }
 
-void oled_print(char* str) {
+volatile uint8_t column = 0;
+
+void oled_print(char str) {
 	int font_size = 8;
-	unsigned char a;
-	for (int i=0; i<font_size; i++) {
-		a = pgm_read_byte(&(font8[*str-(char)32][i]));
+	unsigned char letter;
+	int i = column;
+	for (i; i < (column + font_size); i++) {
+		letter = pgm_read_byte(&(font8[str-32][i-column]));
 		oled_pos(1,i);
-		write_oled_data(a);
+		write_oled_data(letter);
 	}
-	
+	column = column + font_size;	
 }
 
+void oled_arrow_at_pos(uint8_t row, uint8_t column) {
+	oled_pos(row, column);
+	write_oled_data(0b00011000);
+	write_oled_data(0b01111110);
+	write_oled_data(0b00111100);
+	write_oled_data(0b00011000);
+}
 	
 void oled_home() {}

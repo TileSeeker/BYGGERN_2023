@@ -19,29 +19,23 @@
 // left slider: PWM PB4 -> AIN2 / channel 2
 // right slider: PWM PD1 -> AIN3 / channel 3
 
-void oled_arrow_at_pos(uint8_t row, uint8_t column) {
-	oled_pos(row, column);
-	write_oled_data(0b00011000);
-	write_oled_data(0b01111110);
-	write_oled_data(0b00111100);
-	write_oled_data(0b00011000);
-}
-
 int main(void)
 {
 	sei();  //Enable global interrupts	
+	
 	UART_init();
 	XMEM_init();
 	joystick_calibrate();
 	oled_init();
-	
-	//oled test
 	oled_reset();
 	oled_set_brigthness(255);
+	
+	//oled test
 	//oled_arrow_at_pos(1, 30);
 	//oled_arrow_at_pos(4, 60);
-	oled_print("a");
-	oled_print("a");
+	//oled_print("a");
+	//oled_print("a");
+	printf("Hello :D");
 	
 	
 				

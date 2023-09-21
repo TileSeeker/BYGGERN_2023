@@ -5,8 +5,10 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+
 void UART_init(void);
-static int UART_transmit(char message, FILE *stream);
+static int UART_transmit(char message);
 char UART_recive(void);
+
 
 #endif

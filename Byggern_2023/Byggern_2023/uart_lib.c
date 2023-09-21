@@ -5,7 +5,8 @@
 #define BAUD_PRESCALE ((F_CPU / (BAUD * 16UL)) - 1)
 volatile uint8_t transmissionComplete = 1;
 
-static int UART_transmit(char message, FILE *stream) {
+
+static int UART_transmit(char message) {
 	//Wait for prev transmission to complete
 	while (!transmissionComplete);
 	//Set TXC flag to indicate busy
@@ -13,9 +14,7 @@ static int UART_transmit(char message, FILE *stream) {
 	
 	//Put data into UDR buffer, sends the data
 	UDR0 = message;
-	if (message == '\n') {
-		UART_transmit('\r', stream);
-	}
+
 	return 0;
 }
 
@@ -38,7 +37,7 @@ void UART_init() {
 	//Set frame format: 8-bit data, stop bit = 2_bit
 	UCSR0C |= (1 << URSEL0) | (1 << USBS0) | (1 << UCSZ01) | (1 << UCSZ00); //UCSZ10 -> UCSZ01
 	
-	fdevopen(&UART_transmit, &UART_recive);
+	//fdevopen(&UART_transmit, &UART_recive);
 }
 
 //UART transmission complete interrupt handler
