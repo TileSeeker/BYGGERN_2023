@@ -10,3 +10,4 @@ menu_t* create_new_menu(menu_t* prev, menu_t* next, char* text, void (*function)
 
     return new;
 }
+

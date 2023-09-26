@@ -1,6 +1,5 @@
 #ifndef MENU_H
 #define MENU_H
-#include <stdlib.h>
 
 typedef struct menu_t {
     char* menu_text;
