@@ -27,23 +27,23 @@ int main(void)
 	UART_init();
 	XMEM_init();
 	joystick_calibrate();
+	init_joystick_button();
+	uint8_t trigger;
 	
 	//OLED setup
 	oled_init();
 	oled_reset();
 	oled_set_brigthness(255);
-	 DDRB	&= ~(1 << DDB1); //Set pin to INPUT
-	 PORTB	|= (1 << PB1);	//Enable internal pull-up
-	 uint8_t trigger;
 		
 	while(1) {	
 		menu_print();		
 		move_arrow();
 		menu_choice();
 		
-		printf("Joy-button: %d \n\n", ((PINB << PB1) & (1)));
-		trigger = (PINB >>PB1) & (1); //Read Joystick Value
-		//printf("%i\t", trigger);
+		trigger = (PINB >> PB1) & (1); //Read Joystick Value
+		if (!trigger) {
+			printf("Button pres");
+		}
 	}
 }
 

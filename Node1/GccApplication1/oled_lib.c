@@ -48,7 +48,7 @@ void oled_goto_column(uint8_t column) {
 
 void oled_clear_line(uint8_t line) {
 	oled_goto_line(line);
-	for (int j=0; j<127; j++) { //Every row has 128 columns with length of 8 pixels/bits
+	for (int j=0; j<128; j++) { //Every row has 128 columns with length of 8 pixels/bits
 		oled_goto_column(j);
 		write_oled_data(0x00);
 	}
