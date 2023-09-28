@@ -1,4 +1,5 @@
 #include "joystick_lib.h"
+#include <avr/io.h>
 
 void joystick_calibrate(void) {
 	x_middle_position = ADC_read(channel_0);
@@ -52,4 +53,9 @@ joystick_direction joystick_direction_read(void) {
 		direction.y_dir = Y_MID;
 	}
 	return direction;
+}
+
+void init_joystick_button(void) {
+	DDRB &= (1 << DDB1);
+	PORTB |= (1 << PB1);
 }

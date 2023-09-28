@@ -37,6 +37,8 @@ int main(void)
 		menu_print();		
 		move_arrow();
 		menu_choice();
+		
+		printf("Joy-button: %d \n\n", ((PINB << PB1) & (1)));
 	}
 }
 
