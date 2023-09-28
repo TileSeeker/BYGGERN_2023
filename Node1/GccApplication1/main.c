@@ -32,13 +32,6 @@ int main(void)
 	oled_init();
 	oled_reset();
 	oled_set_brigthness(255);
-	
-	//OLED print test
-	//oled_arrow_at_pos(1, 0);
-	//oled_print("Hello", 1, font_size);
-	//oled_print("Hello 2", 2, 1);
-	
-	
 		
 	while(1) {	
 		menu_print();		

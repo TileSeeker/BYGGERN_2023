@@ -3,6 +3,9 @@
 volatile int main_menu = 0;
 volatile int diff_menu = -1;
 volatile uint8_t arrow_pos = 0;
+volatile uint8_t difficulty = 0;
+
+#define diff_menu_pos 1
 
 void menu_print(void) {
 	if (diff_menu == -1) {
@@ -36,31 +39,50 @@ void move_arrow(void) {
 	} else {}
 	
 	if (old_arrow_pos != arrow_pos) {
-		oled_del_arrow_at_pos(old_arrow_pos);
+		oled_del_arrow_at_pos(old_arrow_pos, 0);
 	}
 }
 
 void menu_choice(void) {
 	joystick_direction dir = joystick_direction_read();
-	if (main_menu >= 0 && arrow_pos == 1 && dir.x_dir == RIGHT) {
+	
+	//Choose main or sub menu
+	if (main_menu >= 0 && arrow_pos == diff_menu_pos && dir.x_dir == RIGHT) {
 		oled_reset();
 		main_menu = -1;
 		diff_menu = 0;
 		_delay_ms(300);
+		
 		menu_print();
-	} else if (diff_menu >= 0 && arrow_pos == 1 && dir.x_dir == LEFT) {
+	} else if (diff_menu >= 0 && dir.x_dir == LEFT) {
 		oled_reset();
 		main_menu = 0;
 		diff_menu = -1;
 		_delay_ms(300);
+		
 		menu_print();
 	}
-	//Start
-	//Restart
 	
-	//Easy
-	//Medium
-	//Hard
+	//Choose functions
+	if (main_menu >= 0 && arrow_pos == 0 && dir.x_dir == RIGHT) {
+		printf("Starting.. \n\n");
+		_delay_ms(300);
+	} else if (main_menu >= 0 && arrow_pos == 2 && dir.x_dir == RIGHT) {
+		printf("Restart \n\n");
+		_delay_ms(300);
+	} else if (diff_menu >= 0 && arrow_pos == 0 && dir.x_dir == RIGHT) {
+		difficulty = 0;
+		printf("Difficulty set to easy! \n\n");
+		_delay_ms(300);
+	} else if (diff_menu >= 0 && arrow_pos == 1 && dir.x_dir == RIGHT) {
+		difficulty = 1;
+		printf("Difficulty set to medium! \n\n");
+		_delay_ms(300);
+	} else if (diff_menu >= 0 && arrow_pos == 2 && dir.x_dir == RIGHT) {
+		difficulty = 2;
+		printf("Difficulty set to hard! \n\n");
+		_delay_ms(300);
+	} else {}
 }
 
 	

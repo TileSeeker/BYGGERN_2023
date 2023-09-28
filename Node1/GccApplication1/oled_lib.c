@@ -98,9 +98,9 @@ void oled_arrow_at_pos(uint8_t row, uint8_t column) {
 	write_oled_data(0b00011000);
 }
 
-void oled_del_arrow_at_pos(uint8_t row) {
+void oled_del_arrow_at_pos(uint8_t row, uint8_t column) {
 	oled_goto_line(row);
-	for (int i=0; i<5; i++) {
+	for (int i=column; i<(column + 5); i++) {
 		oled_goto_column(i);
 		write_oled_data(0x00);	
 	}	
