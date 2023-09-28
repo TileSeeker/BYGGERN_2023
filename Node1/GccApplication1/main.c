@@ -32,6 +32,9 @@ int main(void)
 	oled_init();
 	oled_reset();
 	oled_set_brigthness(255);
+	 DDRB	&= ~(1 << DDB1); //Set pin to INPUT
+	 PORTB	|= (1 << PB1);	//Enable internal pull-up
+	 uint8_t trigger;
 		
 	while(1) {	
 		menu_print();		
@@ -39,6 +42,8 @@ int main(void)
 		menu_choice();
 		
 		printf("Joy-button: %d \n\n", ((PINB << PB1) & (1)));
+		trigger = (PINB >>PB1) & (1); //Read Joystick Value
+		//printf("%i\t", trigger);
 	}
 }
 
