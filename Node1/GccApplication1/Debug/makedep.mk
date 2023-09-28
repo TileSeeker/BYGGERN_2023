@@ -8,6 +8,8 @@ joystick_lib.c
 
 main.c
 
+menu_system.c
+
 oled_lib.c
 
 slider_lib.c
