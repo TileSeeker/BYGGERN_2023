@@ -1,7 +1,7 @@
-#ifndef SPI_LIB_H
-#define SPI_LIB_H
+#pragma once
 
+
+void spi_init();
 char spi_read();
-void spi_write();
+void spi_write(char data);
 
-#endif

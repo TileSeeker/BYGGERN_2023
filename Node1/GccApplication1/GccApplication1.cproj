@@ -29,16 +29,16 @@
     <eraseonlaunchrule>0</eraseonlaunchrule>
     <EraseKey />
     <AsfFrameworkConfig>
-      <framework-data xmlns="">
-        <options />
-        <configurations />
-        <files />
-        <documentation help="" />
-        <offline-documentation help="" />
-        <dependencies>
-          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.52.0" />
-        </dependencies>
-      </framework-data>
+      <framework-data>
+  <options />
+  <configurations />
+  <files />
+  <documentation help="" />
+  <offline-documentation help="" />
+  <dependencies>
+    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.42.0" />
+  </dependencies>
+</framework-data>
     </AsfFrameworkConfig>
     <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
     <avrtoolserialnumber>J42700040791</avrtoolserialnumber>
@@ -165,6 +165,12 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="MCP2515_lib.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MCP2515_lib.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="menu_system.c">
       <SubType>compile</SubType>
     </Compile>
@@ -181,6 +187,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="slider_lib.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SPI_lib.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SPI_lib.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="uart_lib.c">

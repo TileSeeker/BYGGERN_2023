@@ -8,11 +8,15 @@ joystick_lib.c
 
 main.c
 
+MCP2515_lib.c
+
 menu_system.c
 
 oled_lib.c
 
 slider_lib.c
+
+SPI_lib.c
 
 uart_lib.c
 

@@ -8,6 +8,8 @@
 #include "slider_lib.h"
 #include "oled_lib.h"
 #include "menu_system.h"
+#include "SPI_lib.h"
+#include "MCP2515_lib.h"
 
 #define F_CPU 4915200UL //4.9152MHz
 #include <util/delay.h>
@@ -34,8 +36,15 @@ int main(void)
 	oled_init();
 	oled_reset();
 	oled_set_brigthness(255);
+	
+	//SPI
+	spi_init();
 		
 	while(1) {	
+		spi_write("H");
+		_delay_ms(100);
+		
+		/*
 		menu_print();		
 		move_arrow();
 		menu_choice();
@@ -44,6 +53,8 @@ int main(void)
 		if (!trigger) {
 			printf("Button pres");
 		}
+		*/
+		
 	}
 }
 
