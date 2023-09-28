@@ -35,7 +35,7 @@ void oled_init(void) {
 	write_oled_command(0xA6); //set normal display
 	write_oled_command(0xAF); //display on
 	
-	fdevopen(&oled_print, NULL);
+	fdevopen(oled_print, NULL);
 }
 
 void oled_goto_line(uint8_t line) {
@@ -96,3 +96,15 @@ void oled_arrow_at_pos(uint8_t row, uint8_t column) {
 }
 	
 void oled_home() {}
+
+
+void print_menu(Menu menu){
+	uint8_t n = menu.menu_options;
+	for(uint8_t i = 0; i<n; i++){
+		printf("\t%s", menu.options[i]);
+	}
+}
+
+void select(Menu menu){
+	
+}

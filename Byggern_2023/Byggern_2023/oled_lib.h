@@ -17,6 +17,13 @@ void oled_print(char str);
 void oled_arrow_at_pos(uint8_t row, uint8_t column);
 
 void oled_home();
+void print_menu(Menu menu);
+void select(Menu menu);
 
+typedef struct Menu {
+	uint8_t select = 0;
+	uint8_t menu_options = 3;
+	char options[3][] =	{"Start", "Quit", "Credits"};
+};
 
 #endif

@@ -37,7 +37,7 @@ void UART_init() {
 	//Set frame format: 8-bit data, stop bit = 2_bit
 	UCSR0C |= (1 << URSEL0) | (1 << USBS0) | (1 << UCSZ01) | (1 << UCSZ00); //UCSZ10 -> UCSZ01
 	
-	//fdevopen(&UART_transmit, &UART_recive);
+	//fdevopen(UART_transmit, UART_recive);
 }
 
 //UART transmission complete interrupt handler

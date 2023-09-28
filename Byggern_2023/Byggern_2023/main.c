@@ -27,6 +27,7 @@ int main(void)
 	XMEM_init();
 	joystick_calibrate();
 	oled_init();
+	//(void)oled_init;
 	oled_reset();
 	oled_set_brigthness(255);
 	
@@ -35,7 +36,9 @@ int main(void)
 	//oled_arrow_at_pos(4, 60);
 	//oled_print("a");
 	//oled_print("a");
-	printf("Hello :D");
+	Menu menu;
+	print_menu(menu);
+	
 	
 	
 				

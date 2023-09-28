@@ -136,7 +136,34 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="adc_lib.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="adc_lib.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="fonts.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="joystick_lib.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="joystick_lib.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="oled_lib.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="oled_lib.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="slider_lib.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="slider_lib.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="uart_lib.c">
