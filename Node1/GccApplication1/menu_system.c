@@ -1,71 +1,66 @@
+#include "menu_system.h"
 
-#include "joystick_lib.h"
-#include "oled_lib.h"
-
-typedef struct main_menu_t {
-	char[] Start;
-	char[] Difficulty;
-	char[] Restart;
-	uint8_t size = 3;
-	} main_menu_t;
-	
-typedef struct diff_menu_t {
-	char[] Easy;
-	char[] Medium;
-	char[] Hard;
-	uint8_t size = 3;
-} diff_menu_t;
-
-volatile uint8_t main_menu_pos = 0;
-volatile uint8_t diff_menu_pos = -1;
+volatile int main_menu = 0;
+volatile int diff_menu = -1;
+volatile uint8_t arrow_pos = 0;
 
 void menu_print(void) {
-	main_menu_t menu;
-	diff_menu_t sub_menu;
-	if diff_menu_pos != -1 {
-		oled_reset();
-		for (int i=0; i<menu.size; i++) {
-			oled_print(menu[i], i, 8);
-		}
-	} else {
-		oled_reset();
-		for (int j=0; j<sub_menu.size; j++) {
-			oled_print(sub_menu[j], j, 8);
-		}
+	if (diff_menu == -1) {
+		oled_print("Start", 0, 8);
+		oled_print("Difficulty", 1, 8);
+		oled_print("Restart", 2, 8);
+	} else if (main_menu == -1) {
+		oled_print("Easy", 0, 8);
+		oled_print("Medium", 1, 8);
+		oled_print("Hard", 2, 8);
 	}
 }
 
-volatile uint8_t arrow_pos = 0;
 void move_arrow(void) {
 	uint8_t old_arrow_pos = arrow_pos;
-	
-	oled_del_arrow_at_pos(old_arrow_pos, 0);
 	oled_arrow_at_pos(arrow_pos, 0);
+	
 	joystick_direction dir = joystick_direction_read();
-	if (dir.y_dir == UP %% dir.x_dir == X_MID && arrow_pos > 1) {
+	if (dir.y_dir == UP && dir.x_dir == X_MID && arrow_pos >= 1) {
 		arrow_pos -= 1;
-	} else if (dir.y_dir == UP %% dir.x_dir == X_MID && arrow_pos == 0) {
+		_delay_ms(300);
+	} else if (dir.y_dir == UP && dir.x_dir == X_MID && arrow_pos == 0) {
 		arrow_pos = 0;
-	} else if (dir.y_dir == DOWN %% dir.x_dir == X_MID && arrow_pos <=3) {
+		_delay_ms(300);
+	} else if (dir.y_dir == DOWN && dir.x_dir == X_MID && arrow_pos <= 2) {
 		arrow_pos += 1;
-	} else if (dir.y_dir == DOWN %% dir.x_dir == X_MID && arrow_pos ==3) {
+		_delay_ms(300);
+	} else if (dir.y_dir == DOWN && dir.x_dir == X_MID && arrow_pos == 2) {
 		arrow_pos = 3;
+		_delay_ms(300);
 	} else {}
+	
+	if (old_arrow_pos != arrow_pos) {
+		oled_del_arrow_at_pos(old_arrow_pos);
+	}
 }
 
 void menu_choice(void) {
 	joystick_direction dir = joystick_direction_read();
-	if (diff_menu_pos == -1 && arrow_pos == 1 && dir.y_dir == Y_MID && dir.x_dir == LEFT) {
-		main_menu_pos = -1;
-		diff_menu_pos = 0;
+	if (main_menu >= 0 && arrow_pos == 1 && dir.x_dir == RIGHT) {
+		oled_reset();
+		main_menu = -1;
+		diff_menu = 0;
+		_delay_ms(300);
 		menu_print();
-	} else if (main_menu_pos == -1 && arrow_pos == 1 && dir.y_dir == Y_MID && dir.x_dir == RIGHT) {
-		main_menu_pos = 0;
-		diff_menu_pos = -1;
+	} else if (diff_menu >= 0 && arrow_pos == 1 && dir.x_dir == LEFT) {
+		oled_reset();
+		main_menu = 0;
+		diff_menu = -1;
+		_delay_ms(300);
 		menu_print();
 	}
 	//Start
 	//Restart
+	
+	//Easy
+	//Medium
+	//Hard
 }
 
 	

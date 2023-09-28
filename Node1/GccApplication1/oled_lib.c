@@ -55,7 +55,7 @@ void oled_clear_line(uint8_t line) {
 }
 
 void oled_reset() {
-	for (int i=0; i<7; i++) {
+	for (int i=0; i<8; i++) {
 		oled_clear_line(i);
 	}
 }
@@ -97,5 +97,15 @@ void oled_arrow_at_pos(uint8_t row, uint8_t column) {
 	write_oled_data(0b00111100);
 	write_oled_data(0b00011000);
 }
+
+void oled_del_arrow_at_pos(uint8_t row) {
+	oled_goto_line(row);
+	for (int i=0; i<5; i++) {
+		oled_goto_column(i);
+		write_oled_data(0x00);	
+	}	
+}
 	
-void oled_home() {}
+void oled_home() {
+	oled_pos(0, 0);
+}

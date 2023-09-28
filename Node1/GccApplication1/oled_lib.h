@@ -18,7 +18,7 @@ void oled_set_brigthness(uint8_t lvl);
 void oled_print_char(char str, uint8_t row, uint8_t column);
 void oled_print(char string[], uint8_t row, uint8_t column);
 void oled_arrow_at_pos(uint8_t row, uint8_t column);
-
+void oled_del_arrow_at_pos(uint8_t row);
 void oled_home();
 
 
