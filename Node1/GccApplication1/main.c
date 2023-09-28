@@ -37,8 +37,8 @@ int main(void)
 	//oled_arrow_at_pos(1, 0);
 	//oled_print("Hello", 1, font_size);
 	//oled_print("Hello 2", 2, 1);
-	 DDRB	&= ~(1 << DDB1);
-	 PORTB	|= (1 << PB1); 
+	 DDRB	&= ~(1 << DDB1); //Set pin to INPUT
+	 PORTB	|= (1 << PB1);	//Enable internal pull-up
 	 uint8_t trigger;
 	
 	
@@ -47,7 +47,7 @@ int main(void)
 		menu_print();		
 		move_arrow();
 		menu_choice();
-		trigger = (PINB >>PB1) & (1);
+		trigger = (PINB >>PB1) & (1); //Read Joystick Value
 		//printf("%i\t", trigger);
 	}
 }
