@@ -1,0 +1,38 @@
+//LED test
+DDRE = 0b10;  //Set ALE as output		//or use 0b10
+PORTE =  0b10; //Set ALE as high		//or use 0b10
+
+DDRA = (1 << DDA0) | (1 << DDA1) | (1 << DDA2);	//Configure PA0 as output
+PORTA = 0b0000000; //PA0 -> D1 
+_delay_ms(2000);
+	
+PORTE = 0b00; //Set ALE low (saves value in latch)
+_delay_ms(2000);
+	
+PORTA = 0b1111111;
+_delay_ms(2000);
+	
+PORTE = 0b10;  //ALE is high and LEDs should update
+
+//NAND test
+XMEM_write(1, 0x401);
+_delay_ms(10);
+XMEM_write(1, 0x800);
+		
+//UART:
+printf("Hello World\n Test");
+UART_tr('B');
+char recived = UART_recive();
+_delay_ms(10);
+printf("%c", recived);
+
+//ADC & joystick test
+//printf("ADC: x: %d\t y: %d\t dir-x: %d\t dir-y: %d \n\n", joystick_position_read().x_pos, joystick_position_read().y_pos, joystick_direction_read().x_dir, joystick_direction_read().y_dir);
+		
+//Slider test
+//printf("Slider: %d \n\n", read_slider_position(channel_2));
+
+//OLED print test
+//oled_arrow_at_pos(1, 0);
+//oled_print("Hello", 1, font_size);
+//oled_print("Hello 2", 2, 1);
