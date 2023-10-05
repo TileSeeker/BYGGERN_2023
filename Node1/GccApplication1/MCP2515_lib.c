@@ -14,37 +14,35 @@ uint8_t mcp2515_init() {
 	uint8_t value ;
 	spi_init () ; // Initialize SPI
 	mcp2515_reset () ; // Send reset - command
+	//mcp2515_bit_modify(MCP_CANCTRL, 0x8, 0x8);
 	
-	_delay_ms(10);
+	_delay_ms(1);
 	
 	// Self - test
-	mcp2515_read(MCP_CANSTAT);
+	value = mcp2515_read(MCP_CANSTAT);
 	
-	_delay_ms(10);
+	_delay_ms(1);
 	
 	if ((value & MODE_MASK) != MODE_CONFIG) {
 		printf ("MCP2515 is NOT in configuration mode after reset !\r\n");
-		return 1;
 	}
-	
-	return 0;
 }
 
 //lab forelesning powerpoint
-uint8_t mcp2515_read(uint8_t address) {
+uint8_t mcp2515_read(uint8_t addres) {
 	uint8_t result ;
 	PORTB &= ~(1 << CAN_CS ); // Select CAN - controller
 	spi_write ( MCP_READ ); // Send read instruction
-	spi_write ( address ); // Send address
+	spi_write ( addres ); // Send address
 	result = spi_read () ; // Read result
 	PORTB |= (1 << CAN_CS ); // De-select CAN - controller
 	return result;
 }
 
-void mcp2515_write(uint8_t address, uint8_t data) {
+void mcp2515_write(uint8_t addres, uint8_t data) {
 	PORTB &= ~(1 << CAN_CS ); // Select CAN - controller
 	spi_write ( MCP_WRITE ); // Send write instruction
-	spi_write ( address ); // Send address
+	spi_write ( addres ); // Send address
 	spi_write(data); // Send data
 	PORTB |= (1 << CAN_CS ); // De-select CAN - controller
 }
@@ -58,17 +56,17 @@ uint8_t mcp2515_read_status() {
 	return status;
 }
 
-void mcp2515_bit_modify(uint8_t address, uint8_t mask,  uint8_t data) {
+void mcp2515_bit_modify(uint8_t addres, uint8_t mask,  uint8_t data) {
 	PORTB &= ~(1 << CAN_CS ); // Select CAN - controller
 	spi_write(MCP_BITMOD);
-	spi_write(address);
+	spi_write(addres);
 	spi_write(mask);
 	spi_write(data);
 	PORTB |= (1 << CAN_CS ); // De-select CAN - controller
 }
 
 void mcp2515_mode_select(uint8_t mode) {
-	mcp2515_bit_modify(MCP_CANCTRL, 0b11100000, mode);
+	mcp2515_bit_modify(MCP_CANCTRL, MODE_MASK, mode);
 }
 
 void mcp2515_rts(int buffer) {

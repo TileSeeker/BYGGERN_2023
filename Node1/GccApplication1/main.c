@@ -37,13 +37,17 @@ int main(void)
 	
 	//CAN
 	mcp2515_init();
-	mcp2515_mode_select(MODE_NORMAL);
-	printf("Mode: %x \r\n", mcp2515_read(MCP_CANSTAT));
+	mcp2515_mode_select(MODE_LOOPBACK);
+	printf("Mode: %x \r\n", (mcp2515_read(MCP_CANSTAT) & MODE_MASK));
 	printf("Status: %x \r\n", mcp2515_read_status());
 	
-	mcp2515_write(0b00110001, 0x24);
-	mcp2515_rts(0);
-	printf("Data %x \r\n", mcp2515_read(0b00110001));
+	printf("Data %x \r\n", mcp2515_read(0b00110110));
+	mcp2515_write(0b00110110, 0x34);
+	_delay_ms(1);
+	spi_write(MCP_RTS_TX0);
+	//mcp2515_rts(0);
+	_delay_ms(1);
+	printf("Data %x \r\n", mcp2515_read(0b01100110));
 		
 	while(1) {	
 		//Menu
