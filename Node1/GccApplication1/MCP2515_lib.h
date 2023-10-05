@@ -151,6 +151,10 @@ uint8_t mcp2515_init(void);
 uint8_t mcp2515_read(uint8_t address);
 void mcp2515_reset(void);
 void mcp2515_write(uint8_t address, uint8_t data);
+void mcp2515_set_mode(uint8_t mode);
 
+void mcp2515_load_tx_buffer(uint8_t data, uint8_t buffer);
+uint8_t mcp2515_read_rx_buffer(uint8_t buffer);
+void mcp2515_can_send(uint8_t buffer);
 
 #endif

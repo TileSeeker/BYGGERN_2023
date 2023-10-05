@@ -26,6 +26,7 @@ int main(void)
 	sei();  //Enable global interrupts	
 	
 	UART_init();
+	//printf("Uart Init\n");
 	XMEM_init();
 	joystick_calibrate();
 	init_joystick_button();
@@ -35,9 +36,20 @@ int main(void)
 	oled_init();
 	oled_reset();
 	oled_set_brigthness(255);
-		
+	
+	mcp2515_init();
+	
+	uint8_t can_data;
 	while(1) {	
 		//Menu
+		mcp2515_load_tx_buffer('H', 0);
+		mcp2515_can_send(0);
+		_delay_ms(1000);
+		can_data = mcp2515_read_rx_buffer(0);
+		printf("%c\r\n", can_data);
+		
+		
+		/*
 		menu_print();		
 		move_arrow();
 		menu_choice();
@@ -47,6 +59,7 @@ int main(void)
 		if (!trigger) {
 			printf("Button pres");
 		}
+		*/
 	}
 }
 
