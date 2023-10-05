@@ -1,34 +1,27 @@
-#include <avr/io.h>
+#include "SPI_lib.h"
 
-#define nSS  PB4
-#define MOSI PB5
-#define MISO PB6
-#define SCK  PB7
-
-void spi_init(){
-	DDRB |=	((1<<MOSI) | (1<<SCK) | (1<<nSS));	//Set MOSI, CLK, and SS to OUTPUT
-	DDRB &= ~(1<<MISO);							//Set MISO as INPUT
-	
-	PORTB |= (1<<nSS);							//Enable pull-up to set SS to active LOW
-		
-	SPCR |= ((1<<SPE)  |	// Enable SPI
-			 (1<<MSTR) |	// Set to Master Mode
-			 (1<<SPR0));	// CLK set to Fosc/16
-			 
-	SPSR &=	 ~(1<<SPI2X);	//Disable SPI double  speed
+void spi_init() {
+	//set MOSI, SCK and SS as output
+	DDRB |= (1 << DD_MOSI) |(1 << DD_SCK) | (1 << DD_SS); 
+	//set MISO as input
+	DDRB &= ~(1 << DD_MISO); 
+	//enable SPI, master and set clock rate fck/16
+	SPCR = |= (1 << SPE) | (1 << MSTR) | (1 << SPR0);  
+	//disable SPI double speed
+	SPSR &= ~(1 << SPI2X);
 }
 
-void spi_write(char data){
-	char buffer;
-	SPDR = data;
-	
-	while (!(SPSR & (1<<SPIF))); //Wait until serial transfer is complete	
-	buffer = SPDR; //Atmega162 requires the SPDE reg to be accessed directly after the SPSR reg to reset the SPIF indicator
-}
-
-char spi_Read()				/* SPI read data function */
-{
+char spi_read() {
+	//write dummy data to SPDR to generate SCK for transfer
 	SPDR = 0xFF;
-	while(!(SPSR & (1<<SPIF)));	/* Wait till reception complete */
-	return(SPDR);			/* Return received data */
+	//SPSR: SPI status register -> SPIF: SPI interrupt flag 
+	//waits until the interrupt flag is set to high, aka when transfer is completed
+	while (!(SPSR & (1 << SPIF))) {}
+	
+	return SPDR
+}
+
+void spi_write(char data) {
+	SPDR = data;
+	while (!(SPSR & (1 << SPIF))) {}
 }

@@ -1,17 +1,7 @@
 #ifndef MCP2515_LIB_H
 #define MCP2515_LIB_H
 
-/*
-mcp2515.h
-
-This file contains constants that are specific to the MCP2515.
-
-Version     Date        Description
-----------------------------------------------------------------------
-v1.00       2003/12/11  Initial release
-
-Copyright 2003 Kimberly Otten Software Consulting
-*/
+#include "SPI_lib.h"
 
 // Define MCP2515 register addresses
 
@@ -155,9 +145,12 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_MERRF		0x80
 
 
-void mcp2515_read();
-void mcp2515_write();
+#define CAN_CS PB4
 
+uint8_t mcp2515_init(void);
+uint8_t mcp2515_read(uint8_t address);
+void mcp2515_reset(void);
+void mcp2515_write(uint8_t address, uint8_t data);
 
 
 #endif

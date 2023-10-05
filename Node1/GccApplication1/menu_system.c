@@ -48,18 +48,18 @@ void menu_choice(void) {
 	
 	//Choose main or sub menu
 	if (main_menu >= 0 && arrow_pos == diff_menu_pos && dir.x_dir == RIGHT) {
-		oled_reset();
 		main_menu = -1;
 		diff_menu = 0;
 		_delay_ms(300);
 		
+		oled_reset();
 		menu_print();
 	} else if (diff_menu >= 0 && dir.x_dir == LEFT) {
-		oled_reset();
 		main_menu = 0;
 		diff_menu = -1;
 		_delay_ms(300);
 		
+		oled_reset();
 		menu_print();
 	}
 	

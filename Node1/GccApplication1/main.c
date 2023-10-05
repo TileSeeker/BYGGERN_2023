@@ -8,7 +8,6 @@
 #include "slider_lib.h"
 #include "oled_lib.h"
 #include "menu_system.h"
-#include "SPI_lib.h"
 #include "MCP2515_lib.h"
 
 #define F_CPU 4915200UL //4.9152MHz
@@ -36,25 +35,18 @@ int main(void)
 	oled_init();
 	oled_reset();
 	oled_set_brigthness(255);
-	
-	//SPI
-	spi_init();
 		
 	while(1) {	
-		spi_write("H");
-		_delay_ms(100);
-		
-		/*
+		//Menu
 		menu_print();		
 		move_arrow();
 		menu_choice();
 		
+		//Joystick button test
 		trigger = (PINB >> PB1) & (1); //Read Joystick Value
 		if (!trigger) {
 			printf("Button pres");
 		}
-		*/
-		
 	}
 }
 
