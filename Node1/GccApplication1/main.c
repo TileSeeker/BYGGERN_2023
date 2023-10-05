@@ -29,24 +29,27 @@ int main(void)
 	XMEM_init();
 	joystick_calibrate();
 	init_joystick_button();
-	uint8_t trigger;
 	
 	//OLED setup
 	oled_init();
 	oled_reset();
 	oled_set_brigthness(255);
+	
+	//CAN
+	mcp2515_init();
+	mcp2515_mode_select(MODE_NORMAL);
+	printf("Mode: %x \r\n", mcp2515_read(MCP_CANSTAT));
+	printf("Status: %x \r\n", mcp2515_read_status());
+	
+	mcp2515_write(0b00110001, 0x24);
+	mcp2515_rts(0);
+	printf("Data %x \r\n", mcp2515_read(0b00110001));
 		
 	while(1) {	
 		//Menu
 		menu_print();		
 		move_arrow();
 		menu_choice();
-		
-		//Joystick button test
-		trigger = (PINB >> PB1) & (1); //Read Joystick Value
-		if (!trigger) {
-			printf("Button pres");
-		}
 	}
 }
 

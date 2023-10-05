@@ -6,7 +6,7 @@ void spi_init() {
 	//set MISO as input
 	DDRB &= ~(1 << DD_MISO); 
 	//enable SPI, master and set clock rate fck/16
-	SPCR = |= (1 << SPE) | (1 << MSTR) | (1 << SPR0);  
+	SPCR |= (1 << SPE) | (1 << MSTR) | (1 << SPR0);  
 	//disable SPI double speed
 	SPSR &= ~(1 << SPI2X);
 }
@@ -18,7 +18,7 @@ char spi_read() {
 	//waits until the interrupt flag is set to high, aka when transfer is completed
 	while (!(SPSR & (1 << SPIF))) {}
 	
-	return SPDR
+	return SPDR;
 }
 
 void spi_write(char data) {
