@@ -25,3 +25,10 @@ void spi_write(char data){
 	while (!(SPSR & (1<<SPIF))); //Wait until serial transfer is complete	
 	buffer = SPDR; //Atmega162 requires the SPDE reg to be accessed directly after the SPSR reg to reset the SPIF indicator
 }
+
+char spi_Read()				/* SPI read data function */
+{
+	SPDR = 0xFF;
+	while(!(SPSR & (1<<SPIF)));	/* Wait till reception complete */
+	return(SPDR);			/* Return received data */
+}
