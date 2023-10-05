@@ -56,6 +56,6 @@ joystick_direction joystick_direction_read(void) {
 }
 
 void init_joystick_button(void) {
-	DDRB &= (1 << DDB1);
-	PORTB |= (1 << PB1);
+	DDRB	&= ~(1 << DDB1); //Set pin to INPUT
+	PORTB	|= (1 << PB1);	//Enable internal pull-up
 }
