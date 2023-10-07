@@ -142,9 +142,9 @@
 #define Fosc 16000000UL //MCP2515 16MHz crystal -> T_OSC = 62.5ns
 #define bitrate 125000UL //CAN bus bitrate of 125kbit/s
 #define TQ 16	// Fosc / bitrate? | SyncSeg (1) + PropSeg + PS1 + PS2 = TQ
-#define PROPSEG 1
+#define PROPSEG 2
 #define PS1 7
-#define PS2 7
+#define PS2 6
 
 //BUFFERS
 //8 higher bits of transmitted message id

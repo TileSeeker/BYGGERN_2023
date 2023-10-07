@@ -98,10 +98,12 @@ void mcp2515_rts(int buffer) {
 void can_init() {
 	mcp2515_init();
 	mcp2515_mode_select(MODE_LOOPBACK); // ->Change mode to normal for NODE2
-	//Generate interrupt when message is sent
-	mcp2515_bit_modify(MCP_CANINTE, MCP_TX01_MASK, MCP_TX01_INT);
-	//Clear the interrupt for transmission buffer at initiation
-	mcp2515_bit_modify(MCP_CANINTF, 0b00000100, 0);
+	//Generate interrupt when message is transmitted from buffer 0
+	mcp2515_bit_modify(MCP_CANINTE, 0b00000100, MCP_TX01_INT);
+	//Generate interrupt when message is received from buffer 0
+	mcp2515_bit_modify(MCP_CANINTE, 0b00000001, MCP_RX_INT);
+	//Clear the interrupt for received buffer at initiation
+	mcp2515_bit_modify(MCP_CANINTF, 0b00000100, MCP_NO_INT);
 }
 
 void can_send_message(can_message_t* message) {
@@ -138,7 +140,7 @@ can_message_t can_recieve_message() {
 		message.data[i] += mcp2515_read(MCP_RXB0D0 + i);
 	}
 	//Clear receive buffer interrupt after the message is received
-	mcp2515_bit_modify(MCP_CANINTF, 0b00000001, 0);
+	mcp2515_bit_modify(MCP_CANINTF, 0b00000001, MCP_NO_INT);
 	
 	return message;
 }
