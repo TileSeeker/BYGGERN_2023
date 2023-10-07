@@ -42,3 +42,13 @@ trigger = (PINB >> PB1) & (1); //Read Joystick Value
 if (!trigger) {
 	printf("Button pres");
 }
+
+//CAN test 1
+//mcp2515_init();
+//mcp2515_mode_select(MODE_LOOPBACK);
+//printf("Status: %x \r\n", mcp2515_read_status());
+//mcp2515_write(MCP_TXB0D0, 'a');
+//mcp2515_write(MCP_TXB0D0+1, 'b');
+//mcp2515_rts(0);
+//printf("Data %x \r\n", mcp2515_read(MCP_RXB0D0));
+//printf("Data %x \r\n", mcp2515_read(MCP_RXB0D0 +1));

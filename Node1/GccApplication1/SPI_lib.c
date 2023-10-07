@@ -6,7 +6,10 @@ void spi_init() {
 	//set MISO as input
 	DDRB &= ~(1 << DD_MISO); 
 	//enable SPI, master and set clock rate fck/16
-	SPCR |= (1 << SPE) | (1 << MSTR) | (1 << SPR0);  
+	SPCR |= (1 << SPE) | (1 << MSTR) | (1 << SPR0); 
+	//SPI in mode 0 when CPOL = 0 and CPHA = 0
+	SPCR &= ~(1 << CPOL);
+	SPCR &= ~(1 << CPHA); 
 	//disable SPI double speed
 	SPSR &= ~(1 << SPI2X);
 }

@@ -35,19 +35,22 @@ int main(void)
 	oled_reset();
 	oled_set_brigthness(255);
 	
-	//CAN
-	mcp2515_init();
-	mcp2515_mode_select(MODE_LOOPBACK);
-	printf("Mode: %x \r\n", (mcp2515_read(MCP_CANSTAT) & MODE_MASK));
+	//CAN test 2
+	can_init();
 	printf("Status: %x \r\n", mcp2515_read_status());
 	
-	printf("Data %x \r\n", mcp2515_read(0b00110110));
-	mcp2515_write(0b00110110, 0x34);
-	_delay_ms(1);
-	spi_write(MCP_RTS_TX0);
-	//mcp2515_rts(0);
-	_delay_ms(1);
-	printf("Data %x \r\n", mcp2515_read(0b01100110));
+	can_message_t test = {
+		.id = 2,
+		.length = 2,
+		.data = "ab"
+	};
+	
+	can_send_message(&test);
+	_delay_ms(10);
+	//Usikker om den fungere fortsatt, siden vi leste fra TX buffer og ikke fra RX når vi testa den ¯\_(?)_/¯
+	can_message_t test_r = can_recieve_message();
+	printf("Data %s \r\n", test_r.data);
+	
 		
 	while(1) {	
 		//Menu
