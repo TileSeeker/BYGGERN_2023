@@ -47,10 +47,9 @@ int main(void)
 	
 	can_send_message(&test);
 	_delay_ms(10);
-	//Usikker om den fungere fortsatt, siden vi leste fra TX buffer og ikke fra RX når vi testa den ¯\_(?)_/¯
+	
 	can_message_t test_r = can_recieve_message();
 	printf("Data %s \r\n", test_r.data);
-	
 		
 	while(1) {	
 		//Menu
