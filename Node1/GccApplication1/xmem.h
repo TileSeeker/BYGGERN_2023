@@ -3,7 +3,6 @@
 
 #include <avr/io.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 #define  BASE_ADDRESS 0x1000
 

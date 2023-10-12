@@ -8,7 +8,6 @@
 #include "slider_lib.h"
 #include "oled_lib.h"
 #include "menu_system.h"
-#include "SPI_lib.h"
 #include "MCP2515_lib.h"
 
 #define F_CPU 4915200UL //4.9152MHz
@@ -30,31 +29,35 @@ int main(void)
 	XMEM_init();
 	joystick_calibrate();
 	init_joystick_button();
-	uint8_t trigger;
 	
 	//OLED setup
 	oled_init();
 	oled_reset();
 	oled_set_brigthness(255);
 	
-	//SPI
-	spi_init();
-		
+	//CAN test 2
+	can_init();
+	printf("Status: %x \r\n", mcp2515_read_status());
+	
+	can_message_t test = {
+		.id = 1000,
+		.length = 3,
+		.data = "aba"
+	};
+	
+	can_send_message(&test);
+	_delay_ms(10);
+	can_message_t test_r = can_recieve_message();
+	
+	printf("ID: %i \r\n", test_r.id);
+	printf("Length: %i \r\n", test_r.length);
+	printf("Data: %s \r\n", test_r.data);
+	
 	while(1) {	
-		spi_write("H");
-		_delay_ms(100);
-		
-		/*
+		//Menu
 		menu_print();		
 		move_arrow();
 		menu_choice();
-		
-		trigger = (PINB >> PB1) & (1); //Read Joystick Value
-		if (!trigger) {
-			printf("Button pres");
-		}
-		*/
-		
 	}
 }
 

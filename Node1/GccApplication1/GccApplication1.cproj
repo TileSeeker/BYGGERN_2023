@@ -29,14 +29,14 @@
     <eraseonlaunchrule>0</eraseonlaunchrule>
     <EraseKey />
     <AsfFrameworkConfig>
-      <framework-data>
+      <framework-data xmlns="">
         <options />
         <configurations />
         <files />
         <documentation help="" />
         <offline-documentation help="" />
         <dependencies>
-          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.42.0" />
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.52.0" />
         </dependencies>
       </framework-data>
     </AsfFrameworkConfig>
@@ -55,19 +55,18 @@
       </ToolNumber>
       <ToolName>Custom Programming Tool</ToolName>
     </custom>
-    <avrtoolinterface>JTAG</avrtoolinterface>
+    <avrtoolinterface />
     <com_atmel_avrdbg_tool_atmelice>
-      <ToolOptions>
+      <ToolOptions xmlns="">
         <InterfaceProperties>
-          <JtagDbgClock>200000</JtagDbgClock>
         </InterfaceProperties>
-        <InterfaceName>JTAG</InterfaceName>
+        <InterfaceName>
+        </InterfaceName>
       </ToolOptions>
-      <ToolType>com.atmel.avrdbg.tool.atmelice</ToolType>
-      <ToolNumber>J42700040791</ToolNumber>
-      <ToolName>Atmel-ICE</ToolName>
+      <ToolType xmlns="">com.atmel.avrdbg.tool.atmelice</ToolType>
+      <ToolNumber xmlns="">J42700040791</ToolNumber>
+      <ToolName xmlns="">Atmel-ICE</ToolName>
     </com_atmel_avrdbg_tool_atmelice>
-    <avrtoolinterfaceclock>200000</avrtoolinterfaceclock>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>

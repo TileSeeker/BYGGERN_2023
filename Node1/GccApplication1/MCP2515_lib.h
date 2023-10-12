@@ -1,20 +1,9 @@
 #ifndef MCP2515_LIB_H
 #define MCP2515_LIB_H
 
-/*
-mcp2515.h
-
-This file contains constants that are specific to the MCP2515.
-
-Version     Date        Description
-----------------------------------------------------------------------
-v1.00       2003/12/11  Initial release
-
-Copyright 2003 Kimberly Otten Software Consulting
-*/
+#include "SPI_lib.h"
 
 // Define MCP2515 register addresses
-
 #define MCP_RXF0SIDH	0x00
 #define MCP_RXF0SIDL	0x01
 #define MCP_RXF0EID8	0x02
@@ -61,9 +50,7 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_TXB1CTRL	0x40
 #define MCP_TXB2CTRL	0x50
 #define MCP_RXB0CTRL	0x60
-#define MCP_RXB0SIDH	0x61
 #define MCP_RXB1CTRL	0x70
-#define MCP_RXB1SIDH	0x71
 
 
 #define MCP_TX_INT		0x1C		// Enable all transmit interrupts
@@ -75,7 +62,6 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_TX_MASK		0x54
 
 // Define SPI Instruction Set
-
 #define MCP_WRITE		0x02
 
 #define MCP_READ		0x03
@@ -102,7 +88,6 @@ Copyright 2003 Kimberly Otten Software Consulting
 
 
 // CANCTRL Register Values
-
 #define MODE_NORMAL     0x00
 #define MODE_SLEEP      0x20
 #define MODE_LOOPBACK   0x40
@@ -121,7 +106,6 @@ Copyright 2003 Kimberly Otten Software Consulting
 
 
 // CNF1 Register Values
-
 #define SJW1            0x00
 #define SJW2            0x40
 #define SJW3            0x80
@@ -129,14 +113,12 @@ Copyright 2003 Kimberly Otten Software Consulting
 
 
 // CNF2 Register Values
-
 #define BTLMODE			0x80
 #define SAMPLE_1X       0x00
 #define SAMPLE_3X       0x40
 
 
 // CNF3 Register Values
-
 #define SOF_ENABLE		0x80
 #define SOF_DISABLE		0x00
 #define WAKFIL_ENABLE	0x40
@@ -144,7 +126,6 @@ Copyright 2003 Kimberly Otten Software Consulting
 
 
 // CANINTF Register Bits
-
 #define MCP_RX0IF		0x01
 #define MCP_RX1IF		0x02
 #define MCP_TX0IF		0x04
@@ -154,10 +135,70 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_WAKIF		0x40
 #define MCP_MERRF		0x80
 
+//CAN chip select
+#define CAN_CS PB4
 
-void mcp2515_read();
-void mcp2515_write();
+//CAN timing 
+#define Fosc 16000000UL		//MCP2515 16MHz crystal
+#define baudrate 125000UL	//CAN bus baudrate of 125kbit/s
+#define BRP 4				//BRP = Fosc / (2 * TQ * baudrate) | BRP = 4 -> time quanta = (2 * BRP) / Fosc = 500ns
+#define TQ 16				//TQ = bit time / time quanta = 8us / 500ns = 16 | bit time = 1 / baudrate = 8us
+#define SYNCSEG 1
+#define PROPSEG 2
+#define PS1 7
+#define PS2 6				//SJW could be a max of 4 TQ, but 1 could be enough if clock generation of the different nodes is not inaccurate or unstable
 
+//BUFFERS
+//8 higher bits of transmitted message id
+#define MCP_TXB0SIDH 0b00110001
+#define MCP_TXB1SIDH 0b01000001
+#define MCP_TXB2SIDH 0b01010001
+
+//3 lower bits of transmitted message id
+#define MCP_TXB0SIDL 0b00110010
+#define MCP_TXB1SIDL 0b01000010
+#define MCP_TXB2SIDL 0b01010010
+
+//transmitted message length
+#define MCP_TXB0DLC 0b00110101
+#define MCP_TXB1DLC 0b01000101
+#define MCP_TXB2DLC 0b01010101
+
+//8 higher bits of received message id
+#define MCP_RXB0SIDH 0b01100001
+#define MCP_RXB1SIDH 0b01110001
+
+//3 lower bits of received message id
+#define MCP_RXB0SIDL 0b01100010
+#define MCP_RXB1SIDL 0b01110010
+
+//received message length
+#define MCP_RXB0DLC	0b01100101
+#define MCP_RXB1DLC	0b01110101
+
+//received/transmitted message data
+#define MCP_TXB0D0 0b00110110
+#define MCP_RXB0D0 0b01100110
+
+//CAN message struct
+typedef struct {
+	unsigned int id;
+	uint8_t length;
+	char data[8];
+} can_message_t;
+
+void mcp2515_reset(void);
+void mcp2515_init(void);
+uint8_t mcp2515_read(uint8_t addres);
+void mcp2515_write(uint8_t addres, uint8_t data);
+uint8_t mcp2515_read_status(void);
+void mcp2515_bit_modify(uint8_t addres, uint8_t mask,  uint8_t mode);
+void mcp2515_mode_select(uint8_t mode);
+void mcp2515_rts();
+
+void can_init(void);
+void can_send_message(can_message_t* message);
+can_message_t can_recieve_message(void);
 
 
 #endif
