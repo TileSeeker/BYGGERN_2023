@@ -139,12 +139,14 @@
 #define CAN_CS PB4
 
 //CAN timing 
-#define Fosc 16000000UL //MCP2515 16MHz crystal -> T_OSC = 62.5ns
-#define bitrate 125000UL //CAN bus bitrate of 125kbit/s
-#define TQ 16	// Fosc / bitrate? | SyncSeg (1) + PropSeg + PS1 + PS2 = TQ
+#define Fosc 16000000UL		//MCP2515 16MHz crystal
+#define baudrate 125000UL	//CAN bus baudrate of 125kbit/s
+#define BRP 4				//BRP = Fosc / (2 * TQ * baudrate) | BRP = 4 -> time quanta = (2 * BRP) / Fosc = 500ns
+#define TQ 16				//TQ = bit time / time quanta = 8us / 500ns = 16 | bit time = 1 / baudrate = 8us
+#define SYNCSEG 1
 #define PROPSEG 2
 #define PS1 7
-#define PS2 6
+#define PS2 6				//SJW could be a max of 4 TQ, but 1 could be enough if clock generation of the different nodes is not inaccurate or unstable
 
 //BUFFERS
 //8 higher bits of transmitted message id
@@ -178,6 +180,7 @@
 #define MCP_TXB0D0 0b00110110
 #define MCP_RXB0D0 0b01100110
 
+//CAN message struct
 typedef struct {
 	unsigned int id;
 	uint8_t length;

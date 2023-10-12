@@ -23,10 +23,9 @@ void mcp2515_init() {
 	}
 	
 	//CAN bus timing | something aint right ¯\_(?)_/¯
-	//uint8_t BRP = Fosc / (2 * TQ * bitrate); //BRP = 4
-	//mcp2515_write(MCP_CNF1, SJW1 | BRP);
-	//mcp2515_write(MCP_CNF2, BTLMODE | SAMPLE_1X | (PS1 << 3) | PROPSEG);
-	//mcp2515_write(MCP_CNF3, WAKFIL_DISABLE | PS2);
+	mcp2515_write(MCP_CNF1, SJW1 | BRP);
+	mcp2515_write(MCP_CNF2, BTLMODE | SAMPLE_1X | (PS1 << 3) | PROPSEG);
+	mcp2515_write(MCP_CNF3, WAKFIL_DISABLE | PS2);
 }
 
 //lab forelesning powerpoint
@@ -132,7 +131,7 @@ can_message_t can_recieve_message() {
 	//Read message id
 	uint8_t idh = mcp2515_read(MCP_RXB0SIDH);
 	uint8_t idl = mcp2515_read(MCP_RXB0SIDL);
-	message.id = idh + (0b11100000 & idl);
+	message.id = (idh << 3) + ((0b11100000 & idl) >> 5);
 	//Read message length
 	message.length = mcp2515_read(MCP_RXB0DLC);
 	//Read message

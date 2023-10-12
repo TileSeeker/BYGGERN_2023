@@ -40,18 +40,19 @@ int main(void)
 	printf("Status: %x \r\n", mcp2515_read_status());
 	
 	can_message_t test = {
-		.id = 2,
-		.length = 2,
-		.data = "ab"
+		.id = 1000,
+		.length = 3,
+		.data = "aba"
 	};
 	
 	can_send_message(&test);
 	_delay_ms(10);
-	//Usikker om den fungere fortsatt, siden vi leste fra TX buffer og ikke fra RX når vi testa den ¯\_(?)_/¯
 	can_message_t test_r = can_recieve_message();
-	printf("Data %s \r\n", test_r.data);
 	
-		
+	printf("ID: %i \r\n", test_r.id);
+	printf("Length: %i \r\n", test_r.length);
+	printf("Data: %s \r\n", test_r.data);
+	
 	while(1) {	
 		//Menu
 		menu_print();		
