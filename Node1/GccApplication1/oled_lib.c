@@ -42,8 +42,8 @@ void oled_goto_line(uint8_t line) {
 }
 
 void oled_goto_column(uint8_t column) {
-	write_oled_command(0x00 + (column % 16)); //lower nibble of column / last 4 bits of column
-	write_oled_command(0x10 + (column / 16)); //higher nibble of column / first 4 bits of column
+	write_oled_command(0x00 + (column >> 4)); //lower nibble of column / last 4 bits of column
+	write_oled_command(0x10 + (column & 0xF)); //higher nibble of column / first 4 bits of column
 }
 
 void oled_clear_line(uint8_t line) {

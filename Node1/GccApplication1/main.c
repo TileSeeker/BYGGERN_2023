@@ -35,29 +35,20 @@ int main(void)
 	oled_reset();
 	oled_set_brigthness(255);
 	
-	//CAN test 2
 	can_init();
-	printf("Status: %x \r\n", mcp2515_read_status());
-	
-	can_message_t test = {
-		.id = 1000,
-		.length = 3,
-		.data = "aba"
-	};
-	
-	can_send_message(&test);
-	_delay_ms(10);
-	can_message_t test_r = can_recieve_message();
-	
-	printf("ID: %i \r\n", test_r.id);
-	printf("Length: %i \r\n", test_r.length);
-	printf("Data: %s \r\n", test_r.data);
-	
+	can_message_t test_r;
 	while(1) {	
 		//Menu
 		menu_print();		
 		move_arrow();
 		menu_choice();
+		
+		//CAN read
+		test_r = can_recieve_message();
+		printf("ID: %i \r\n", test_r.id);
+		printf("Length: %i \r\n", test_r.length);
+		printf("Data: %s \r\n", test_r.data);
+		_delay_ms(10);
 	}
 }
 
