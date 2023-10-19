@@ -4,16 +4,16 @@
 #include <util/delay.h>
 
 void mcp2515_reset() {
-	PORTB &= ~(1 << CAN_CS ); // Select CAN - controller
-	spi_write(MCP_RESET);	// Send reset instruction
-	PORTB |= (1 << CAN_CS ); // De-select CAN - controller
+	PORTB &= ~(1 << CAN_CS );		// Select CAN - controller
+	spi_write(MCP_RESET);			// Send reset instruction
+	PORTB |= (1 << CAN_CS );		// De-select CAN - controller
 	_delay_ms(10);
 }
 
 void mcp2515_init() {
-	uint8_t value ;
-	spi_init () ; // Initialize SPI
-	mcp2515_reset () ; // Send reset - command
+	uint8_t value;
+	spi_init ();			// Initialize SPI
+	mcp2515_reset ();		// Send reset - command
 
 	// Self - test
 	value = mcp2515_read(MCP_CANSTAT);	
@@ -30,38 +30,38 @@ void mcp2515_init() {
 //lab forelesning powerpoint
 uint8_t mcp2515_read(uint8_t addres) {
 	uint8_t result ;
-	PORTB &= ~(1 << CAN_CS); // Select CAN - controller
-	spi_write (MCP_READ); // Send read instruction
-	spi_write (addres); // Send address
-	result = spi_read() ; // Read result
-	PORTB |= (1 << CAN_CS); // De-select CAN - controller
+	PORTB &= ~(1 << CAN_CS);		// Select CAN - controller
+	spi_write (MCP_READ);			// Send read instruction
+	spi_write (addres);				// Send address
+	result = spi_read();			// Read result
+	PORTB |= (1 << CAN_CS);			// De-select CAN - controller
 	return result;
 }
 
 void mcp2515_write(uint8_t addres, uint8_t data) {
-	PORTB &= ~(1 << CAN_CS); // Select CAN - controller
-	spi_write (MCP_WRITE); // Send write instruction
-	spi_write (addres); // Send address
-	spi_write(data); // Send data
-	PORTB |= (1 << CAN_CS); // De-select CAN - controller
+	PORTB &= ~(1 << CAN_CS);		// Select CAN - controller
+	spi_write (MCP_WRITE);			// Send write instruction
+	spi_write (addres);				// Send address
+	spi_write(data);				// Send data
+	PORTB |= (1 << CAN_CS);			// De-select CAN - controller
 }
 
 uint8_t mcp2515_read_status() {
 	uint8_t status;
-	PORTB &= ~(1 << CAN_CS); // Select CAN - controller
+	PORTB &= ~(1 << CAN_CS);		// Select CAN - controller
 	spi_write(MCP_READ_STATUS);
 	status = spi_read();
-	PORTB |= (1 << CAN_CS); // De-select CAN - controller
+	PORTB |= (1 << CAN_CS);			// De-select CAN - controller
 	return status;
 }
 
 void mcp2515_bit_modify(uint8_t addres, uint8_t mask,  uint8_t mode) {
-	PORTB &= ~(1 << CAN_CS); // Select CAN - controller
+	PORTB &= ~(1 << CAN_CS);		// Select CAN - controller
 	spi_write(MCP_BITMOD);
 	spi_write(addres);
 	spi_write(mask);
 	spi_write(mode);
-	PORTB |= (1 << CAN_CS); // De-select CAN - controller
+	PORTB |= (1 << CAN_CS);			// De-select CAN - controller
 }
 
 void mcp2515_mode_select(uint8_t mode) {
@@ -76,7 +76,7 @@ void mcp2515_mode_select(uint8_t mode) {
 }
 
 void mcp2515_rts(int buffer) {
-	PORTB &= ~(1 << CAN_CS ); // Select CAN - controller
+	PORTB &= ~(1 << CAN_CS );		// Select CAN - controller
 	switch (buffer) {
 		case 0:
 			spi_write(MCP_RTS_TX0);
@@ -90,12 +90,12 @@ void mcp2515_rts(int buffer) {
 		default:
 			spi_write(MCP_RTS_TX0);
 	}	
-	PORTB |= (1 << CAN_CS ); // De-select CAN - controller
+	PORTB |= (1 << CAN_CS );		// De-select CAN - controller
 }
 
 void can_init() {
 	mcp2515_init();
-	mcp2515_mode_select(MODE_NORMAL); // ->Change mode to LOOPBACK for testing
+	mcp2515_mode_select(MODE_NORMAL);
 	//Generate interrupt when message is transmitted from buffer 0
 	mcp2515_bit_modify(MCP_CANINTE, 0b00000100, MCP_TX01_INT);
 	//Generate interrupt when message is received from buffer 0

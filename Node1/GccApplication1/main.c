@@ -35,14 +35,7 @@ int main(void)
 	oled_reset();
 	oled_set_brigthness(255);
 	
-	can_init();
-	
-// 	can_message_t test = {
-// 		.id = 0,
-// 		.length = 2,
-// 		.data = "ab"
-// 	};
-	
+	can_init();	
 
 	while(1) {	
 		//Menu
