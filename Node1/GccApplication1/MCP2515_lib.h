@@ -141,12 +141,15 @@
 //CAN timing 
 #define Fosc 16000000UL		//MCP2515 16MHz crystal
 #define baudrate 125000UL	//CAN bus baudrate of 125kbit/s
+
 #define BRP 4				//BRP = Fosc / (2 * TQ * baudrate) | BRP = 4 -> time quanta = (2 * BRP) / Fosc = 500ns
-#define TQ 16				//TQ = bit time / time quanta = 8us / 500ns = 16 | bit time = 1 / baudrate = 8us
-#define SYNCSEG 1
+#define TQ 16				//TQ = bit time / time quanta = 8us / 500ns = 16 | bit time = 1 / baudrate = 8us | TQ = SyncSeg + PropSeg + PS1 + PS2
+#define SJW 1				//1 could be enough if clock generation of the different nodes is not inaccurate or unstable
+#define SYNCSEG 1			//Fixed at 1 TQ
 #define PROPSEG 2
-#define PS1 7
-#define PS2 6				//SJW could be a max of 4 TQ, but 1 could be enough if clock generation of the different nodes is not inaccurate or unstable
+							//Sampling at 60%:
+#define PS1 7				//(SyncSeg + PropSeg + PS1) / (SyncSeg + PropSeg + PS1 + PS2) = 60% -> (1 + 2 + PS1) / 16 = 60% -> PS1 = 16 * 60% - 3 = 10 - 3 = 7
+#define PS2 6				//PS2 = TQ - SyncSeg - PropSeg - PS1 = 16 - 1 - 2 - 7 = 6		
 
 //BUFFERS
 //8 higher bits of transmitted message id

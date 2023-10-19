@@ -10,7 +10,6 @@ void mcp2515_reset() {
 	_delay_ms(10);
 }
 
-//lab forelesning powerpoint
 void mcp2515_init() {
 	uint8_t value ;
 	spi_init () ; // Initialize SPI
@@ -22,10 +21,10 @@ void mcp2515_init() {
 		printf ("MCP2515 is NOT in configuration mode after reset !\r\n");
 	}
 	
-	//CAN bus timing | something aint right ¯\_(?)_/¯
-	mcp2515_write(MCP_CNF1, SJW1 | BRP);
-	mcp2515_write(MCP_CNF2, BTLMODE | SAMPLE_1X | (PS1 << 3) | PROPSEG);
-	mcp2515_write(MCP_CNF3, WAKFIL_DISABLE | PS2);
+	//CAN bus timing
+	mcp2515_write(MCP_CNF1, SJW1 | (BRP - 1));
+	mcp2515_write(MCP_CNF2, BTLMODE | SAMPLE_1X | ((PS1 - 1) << 3) | (PROPSEG - 1));
+	mcp2515_write(MCP_CNF3, WAKFIL_DISABLE | (PS2 - 1));
 }
 
 //lab forelesning powerpoint
@@ -96,7 +95,7 @@ void mcp2515_rts(int buffer) {
 
 void can_init() {
 	mcp2515_init();
-	mcp2515_mode_select(MODE_LOOPBACK); // ->Change mode to normal for NODE2
+	mcp2515_mode_select(MODE_NORMAL); // ->Change mode to LOOPBACK for testing
 	//Generate interrupt when message is transmitted from buffer 0
 	mcp2515_bit_modify(MCP_CANINTE, 0b00000100, MCP_TX01_INT);
 	//Generate interrupt when message is received from buffer 0
