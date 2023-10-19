@@ -39,5 +39,6 @@ int MAP(int pos_in, int pos_in_min, int pos_in_max, int pos_out_min, int pos_out
 joystick_position joystick_position_read(void);
 joystick_direction joystick_direction_read(void);
 void init_joystick_button(void);
+void can_send_joystick(void);
 
 #endif

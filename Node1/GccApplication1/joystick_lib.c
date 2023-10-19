@@ -1,5 +1,6 @@
 #include "joystick_lib.h"
 #include <avr/io.h>
+#include "MCP2515_lib.h"
 
 void joystick_calibrate(void) {
 	x_middle_position = ADC_read(channel_0);
@@ -58,4 +59,17 @@ joystick_direction joystick_direction_read(void) {
 void init_joystick_button(void) {
 	DDRB	&= ~(1 << DDB1); //Set pin to INPUT
 	PORTB	|= (1 << PB1);	//Enable internal pull-up
+}
+
+void can_send_joystick() {
+	joystick_position pos = joystick_position_read();
+	
+	can_message_t joy_pos = {
+		.id = 0,
+		.length = 4,
+		.data[0] = (uint8_t)pos.x_pos,
+		.data[1] = (uint8_t)pos.y_pos
+	};
+	
+	can_send_message(&joy_pos);
 }

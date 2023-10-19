@@ -36,19 +36,24 @@ int main(void)
 	oled_set_brigthness(255);
 	
 	can_init();
-	can_message_t test_r;
+	
+// 	can_message_t test = {
+// 		.id = 0,
+// 		.length = 2,
+// 		.data = "ab"
+// 	};
+	
+
 	while(1) {	
 		//Menu
-		menu_print();		
-		move_arrow();
-		menu_choice();
+		//menu_print();		
+		//move_arrow();
+		//menu_choice();
 		
-		//CAN read
-		test_r = can_recieve_message();
-		printf("ID: %i \r\n", test_r.id);
-		printf("Length: %i \r\n", test_r.length);
-		printf("Data: %s \r\n", test_r.data);
-		_delay_ms(10);
+		//CAN send
+		can_send_joystick();
+		printf("ADC: x: %d\t y: %d\t dir-x: %d\t dir-y: %d \r\n", joystick_position_read().x_pos, joystick_position_read().y_pos, joystick_direction_read().x_dir, joystick_direction_read().y_dir);
+		_delay_ms(100);
 	}
 }
 
