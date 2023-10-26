@@ -11,6 +11,10 @@
 // -> 0b 00000000 00101001 00000001 01100101 -> 0x290165
 #define CAN_BAUDRATE 0x0290165
 
+int MAP(int pos_in, int pos_in_min, int pos_in_max, int pos_out_min, int pos_out_max) {
+	return ((((pos_in - pos_in_min) * (pos_out_max - pos_out_min)) / (pos_in_max - pos_in_min)) + pos_out_min);
+}
+
 int main(void)
 {
 	SystemInit();					//Initialize the SAM system
@@ -18,8 +22,6 @@ int main(void)
 	PMC->PMC_WPMR &= ~(0x1);		//WPEN bit clear for PIO write protect mode register 
 	led_init();						//LED on
 	configure_uart();				//Baudrate = master clock / (16 * clock divider) = 84MHz / (16 * 547) = 9600
-	
-	//PWM test
 	pwm_init();
 	
 	//CAN test
@@ -36,5 +38,8 @@ int main(void)
 			
 		itoa((int8_t)rec.data[1], msg_str, 10);
 		printf("y: %s\r\n", msg_str);
-    }
+		
+		//Control duty cycle with joystick
+		pwm_joystick(&rec, 1);
+	}
 }

@@ -16,5 +16,7 @@ printf-stdarg.c
 
 sam_led.c
 
+sam_pwm.c
+
 uart.c
 
