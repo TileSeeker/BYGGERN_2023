@@ -198,6 +198,12 @@
     <Compile Include="printf-stdarg.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="sam_adc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sam_adc.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="sam_led.c">
       <SubType>compile</SubType>
     </Compile>

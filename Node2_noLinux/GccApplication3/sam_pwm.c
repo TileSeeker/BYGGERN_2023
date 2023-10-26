@@ -2,7 +2,7 @@
 #include "sam.h"
 
 void pwm_init() {
-	PMC->PMC_PCER1 |= PMC_PCER1_PID36;		//Enable peripheral clock for PWM
+	PMC->PMC_PCER1 |= PMC_PCER1_PID36;		//Enable peripheral PWM controller
 	PIOC->PIO_ABSR |= PIO_ABSR_P19;			//Select B peripheral register for PWM waveform output high for channel 5 for pin 45
 	PIOC->PIO_PDR |= PIO_PDR_P19;			//Enables peripheral control of the pin 45
 	
@@ -12,6 +12,10 @@ void pwm_init() {
 	PWM->PWM_CH_NUM[5].PWM_CPRD |= 20000;												//Set channel 5 period to 20ms
 	PWM->PWM_CH_NUM[5].PWM_CDTY |= 1500;												//Set channel 5 duty cycle to 1.5ms (center position)
 	PWM->PWM_ENA |= PWM_ENA_CHID5;														//Enable PWM output for channel 5	
+}
+
+int MAP(int pos_in, int pos_in_min, int pos_in_max, int pos_out_min, int pos_out_max) {
+	return ((((pos_in - pos_in_min) * (pos_out_max - pos_out_min)) / (pos_in_max - pos_in_min)) + pos_out_min);
 }
 
 void pwm_joystick(CAN_MESSAGE* rec, int channel) {
