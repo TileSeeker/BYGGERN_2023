@@ -13,6 +13,9 @@
 #define CAN_BAUDRATE 0x0290165
 
 
+volatile uint8_t score = 0;
+#define goal_threshold 0;
+
 int main(void)
 {
 	SystemInit();					//Initialize the SAM system
@@ -43,5 +46,10 @@ int main(void)
 		
 		//Test ADC:
 		printf("ADC: %i \r\n", adc_read());
+		
+		if ((adc_read() > goal_threshold) && (adc_read_last() > goal_threshold)) {
+			score += 1;
+			printf("Goal! current score: %i \r\n", score);
+		}
 	}
 }

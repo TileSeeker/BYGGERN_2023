@@ -3,8 +3,8 @@
 
 void pwm_init() {
 	PMC->PMC_PCER1 |= PMC_PCER1_PID36;		//Enable peripheral PWM controller
-	PIOC->PIO_ABSR |= PIO_ABSR_P19;			//Select B peripheral register for PWM waveform output high for channel 5 for pin 45
-	PIOC->PIO_PDR |= PIO_PDR_P19;			//Enables peripheral control of the pin 45
+	PIOC->PIO_ABSR |= PIO_ABSR_P19;			//Select B peripheral register for PWM waveform output high for channel 5 for PC19 -> pin 44
+	PIOC->PIO_PDR |= PIO_PDR_P19;			//Enables peripheral control of the PC19
 	
 	//Wave period = 1 / 50Hz = (2 * CPRD * DIVA) / MCK -> 50 Hz = MCK / (2 * CPRD * DIVA) = 84MHz / (2 * 20000 * 42) = 50Hz
 	PWM->PWM_CLK |= PWM_CLK_PREA(0) | PWM_CLK_DIVA(42);									//Set PWM clock to 2MHz
