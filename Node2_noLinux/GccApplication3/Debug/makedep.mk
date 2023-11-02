@@ -14,6 +14,10 @@ main.c
 
 printf-stdarg.c
 
+sam_adc.c
+
+sam_dac.c
+
 sam_led.c
 
 sam_pwm.c
