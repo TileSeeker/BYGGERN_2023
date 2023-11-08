@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "sam_dac.h"
+#include "sam_motor.h"
+#include "sam_solenoid.h"
 
 
 //MCK = 84MHz & CAN baud rate = 125kbit/s
@@ -24,7 +26,6 @@ volatile uint16_t adc_data;
 volatile bool score_toggle;
 
 
-
 int main(void)
 {
 	SystemInit();					//Initialize the SAM system
@@ -35,6 +36,9 @@ int main(void)
 	pwm_init();
 	adc_init();
 	dac_init();
+	sysTick_init();
+	motor_init();
+	
 	
 	//CAN message
 	can_init_def_tx_rx_mb(CAN_BAUDRATE);
@@ -76,7 +80,11 @@ int main(void)
 		}
 		
 		dac_write((int8_t)rec.data[0]);
-		printf("DATA0: %d \r\n", (int8_t)rec.data[0]);
+		//printf("DATA0: %d \r\n", (int8_t)rec.data[0]);
+		
+		int16_t enc_data= read_encoder();
+		printf("Encoder: %d \r\n", enc_data);
+		
 	}
 }
 

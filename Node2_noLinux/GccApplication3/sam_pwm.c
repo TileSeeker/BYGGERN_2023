@@ -1,6 +1,4 @@
 #include "sam_pwm.h"
-#include "sam.h"
-#include <stdint.h>
 
 void pwm_init() {
 	PMC->PMC_PCER1 |= PMC_PCER1_PID36;		//Enable peripheral PWM controller

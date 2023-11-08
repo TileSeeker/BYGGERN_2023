@@ -1,10 +1,9 @@
 #include "sam_adc.h"
-#include "sam.h"
 
 void adc_init() {
 	PMC->PMC_PCER1 |= PMC_PCER1_PID37;		//Enable peripheral ADC controller
 	ADC->ADC_MR |= ADC_MR_FREERUN;			//Enable free run mode (never wait for any trigger)
-	ADC->ADC_CHER |= ADC_CHER_CH0;			//Enable ADC channel 0
+	ADC->ADC_CHER |= ADC_CHER_CH0;			//Enable ADC channel 0 => PA2 -> AD7 -> pin 8 analog P2 
 	ADC->ADC_CR |= ADC_CR_START;			//Start analog to digital conversion
 }
 
