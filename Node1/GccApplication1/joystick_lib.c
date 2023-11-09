@@ -53,6 +53,10 @@ joystick_direction joystick_direction_read(void) {
 	} else {
 		direction.y_dir = Y_MID;
 	}
+
+	//Button_Press Read
+	direction.button_press = PINB & (1<<PINB2);
+	
 	return direction;
 }
 
@@ -66,10 +70,12 @@ void can_send_joystick() {
 	
 	can_message_t joy_pos = {
 		.id = 0,
-		.length = 2,
+		.length = 3,
 		.data[0] = (uint8_t)pos.x_pos,
-		.data[1] = (uint8_t)pos.y_pos
+		.data[1] = (uint8_t)pos.y_pos,
+		.data[2] = (uint8_t)pos.button_press
 	};
 	
 	can_send_message(&joy_pos);
 }
+

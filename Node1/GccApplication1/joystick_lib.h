@@ -27,11 +27,13 @@ typedef enum {
 typedef struct {
 	char x_dir;
 	char y_dir;
+	int button_press;
 } joystick_direction;
 	
 typedef struct {
 	int x_pos;
 	int y_pos;
+	int button_press;
 } joystick_position;
 	
 void joystick_calibrate(void);
