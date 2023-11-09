@@ -5,6 +5,7 @@
 #include "sam_delay.h"
 #include "sam_dac.h"
 #include "sam_pi_controller.h"
+#include "can_controller.h"
 
 #define DIR PIO_PD10
 #define EN PIO_PD9

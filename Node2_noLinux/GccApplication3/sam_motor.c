@@ -1,4 +1,6 @@
 #include "sam_motor.h"
+#include "can_controller.h"
+#include "sam_pwm.h"
 
 void motor_init() {
 	PMC->PMC_PCER0 |= (PMC_PCER0_PID13 | PMC_PCR_EN);			//Enable parallel I/O controller C

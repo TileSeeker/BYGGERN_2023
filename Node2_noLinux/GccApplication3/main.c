@@ -33,6 +33,8 @@ int main(void)
 	PMC->PMC_WPMR &= ~(0x1);		//WPEN bit clear for PIO write protect mode register 
 	led_init();						
 	configure_uart();				//Baudrate = master clock / (16 * clock divider) = 84MHz / (16 * 547) = 9600
+	can_init_def_tx_rx_mb(CAN_BAUDRATE);
+	
 	pwm_init();
 	adc_init();
 	dac_init();
@@ -41,7 +43,7 @@ int main(void)
 	
 	
 	//CAN message
-	can_init_def_tx_rx_mb(CAN_BAUDRATE);
+
 	CAN_MESSAGE rec;
 	char msg_str[10];
 	score_toggle = 0;
@@ -51,7 +53,7 @@ int main(void)
 		
 		//Print joystick x and y position from node 1
 		itoa((int8_t)rec.data[0], msg_str, 10);
-		//printf("x: %s\t", msg_str);
+		printf("x: %s\t", msg_str);
 			
 		itoa((int8_t)rec.data[1], msg_str, 10);
 		//printf("y: %s\r\n", msg_str);
@@ -79,12 +81,14 @@ int main(void)
 			score_toggle = 0;
 		}
 		
-		dac_write((int8_t)rec.data[0]);
-		//printf("DATA0: %d \r\n", (int8_t)rec.data[0]);
+		int8_t dac_data = rec.data[0];
+		dac_write(dac_data);
+		//printf("CAN Data %d \t",  rec.data[0]);
+		printf("DATA0: %d \t", dac_data);
 		
 		int16_t enc_data= read_encoder();
 		printf("Encoder: %d \r\n", enc_data);
-		
+
+		//delay_us(100000);
 	}
 }
-
