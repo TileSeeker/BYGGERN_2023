@@ -46,7 +46,7 @@ int main(void)
 		//CAN send
 		can_send_joystick();
 		printf("ADC: x: %d\t y: %d\t dir-x: %d\t dir-y: %d \t", joystick_position_read().x_pos, joystick_position_read().y_pos, joystick_direction_read().x_dir, joystick_direction_read().y_dir);
-		printf("button: %d \r\n", joystick_position_read().button_press);
+		printf("button: %i \r\n", joystick_position_read().button_press);
 		//printf("x: %d\t y: %d\t \r\n", ADC_read(channel_0), ADC_read(channel_1));
 
 		

@@ -14,15 +14,10 @@
 #define NOT_RST PIO_PD1
 #define MJ2 (PIO_PC1 | PIO_PC2 | PIO_PC3 | PIO_PC4 | PIO_PC5 | PIO_PC6 | PIO_PC7 | PIO_PC8)
 
-//Need to measure
-#define encoder_max 1403
-#define encoder_min 0
-#define encoder_mid 700
-
 void motor_init(void);
 int16_t read_encoder(void);
 void restart_encoder(void);
 void motor_position_joystick(CAN_MESSAGE* rec, int channel);
-void motor_middle();
+void motor_calib();
 
 #endif

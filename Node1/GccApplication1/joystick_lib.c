@@ -29,6 +29,10 @@ joystick_position joystick_position_read(void) {
 		} else {
 		position.y_pos = MAP(y_pos, y_middle_position, xy_position_max, 0, 100);
 	}
+	
+	//Button_Press Read
+	position.button_press = !((PINB >> PB1) & 1);
+	
 	return position;
 }
 
@@ -53,9 +57,6 @@ joystick_direction joystick_direction_read(void) {
 	} else {
 		direction.y_dir = Y_MID;
 	}
-
-	//Button_Press Read
-	direction.button_press = PINB & (1<<PINB2);
 	
 	return direction;
 }

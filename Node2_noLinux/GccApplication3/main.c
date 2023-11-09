@@ -38,11 +38,16 @@ int main(void)
 	dac_init();
 	sysTick_init();
 	motor_init();
+	solenoid_init();
+	
+	motor_calib();
+	
 	
 	//CAN message
 	can_init_def_tx_rx_mb(CAN_BAUDRATE);
 	CAN_MESSAGE rec;
 	char msg_str[10];
+	
 	score_toggle = 0;
     while (1) {
 
@@ -80,13 +85,17 @@ int main(void)
 		
 		//int8_t dac_data = rec.data[0];
 		//dac_write(dac_data);
-		//printf("CAN Data %d \t",  rec.data[0]);
 		//printf("DATA0: %d \t", dac_data);
 		
 		int16_t enc_data= read_encoder();
-		printf("Encoder: %d \r\n", enc_data);
+		//printf("Encoder: %d \r\n", enc_data);
 
-		motor_position_joystick(&rec, 0);
+		//motor_position_joystick(&rec, 0);
+		
+		if (rec.data[2] == 1) {
+			printf("Hit");
+			solenoid_hit_bal();
+		}
 	}
 }
 

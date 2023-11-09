@@ -1,13 +1,13 @@
 #include "sam_pi_controller.h"
 
-volatile uint16_t error_sum = 0;
+volatile int16_t error_sum = 0;
 
 int16_t PI_controller(int16_t current_pos, int16_t target_pos) {
 	int16_t error = target_pos - current_pos;
 	error_sum += error;
 	int16_t p = K_p * error;
 	int16_t i = K_i * error_sum;
-	int16_t u = p + i;
+	int16_t u = (p + i) * 0.5;
 	
 	//Need to set/find max and min value
 	if (u > u_max) {
