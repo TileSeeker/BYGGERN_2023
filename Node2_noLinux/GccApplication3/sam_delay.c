@@ -12,5 +12,7 @@ void sysTick_init(){
 void delay_us(uint32_t us) {
 	SysTick->LOAD =(84000000U / 1000000U) * us - 1;
 	SysTick->VAL = 0;
-	while ((SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) == 0) {}
+	while ((SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) == 0) {
+		asm("NOP");
+	}
 }
