@@ -39,9 +39,9 @@ int main(void)
 
 	while(1) {	
 		//Menu
-		//menu_print();		
-		//move_arrow();
-		//menu_choice();
+		menu_print();		
+		move_arrow();
+		menu_choice();
 		
 		//CAN send
 		can_send_joystick();

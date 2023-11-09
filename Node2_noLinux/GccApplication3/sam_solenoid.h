@@ -5,6 +5,6 @@
 #include "sam_delay.h"
 
 void solenoid_init();
-void solenoid_hit_bal();
+
 
 #endif

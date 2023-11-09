@@ -6,9 +6,3 @@ void solenoid_init() {
 	PIOA->PIO_OER = PIO_OER_P14;		//Pin 23 output enable
 }
 
-void solenoid_hit_bal() {
-		PIOA->PIO_CODR = PIO_SODR_P14;	//Set pin 23 high
-		delay_us(900000);
-		delay_us(900000);
-		PIOA->PIO_SODR = PIO_CODR_P14;	//Set pin 23 low 
-}

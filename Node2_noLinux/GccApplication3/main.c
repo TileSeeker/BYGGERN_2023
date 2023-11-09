@@ -18,8 +18,8 @@
 // -> 0b 00000000 00101001 00000001 01100101 -> 0x290165
 #define CAN_BAUDRATE 0x0290165
 
-#define goal_threshold_falling 300
-#define goal_threshold_rising 1000
+#define goal_threshold_falling 1000
+#define goal_threshold_rising 2000
 volatile uint8_t score = 0;
 volatile uint16_t adc_last_data;
 volatile uint16_t adc_data;
@@ -40,7 +40,6 @@ int main(void)
 	motor_init();
 	solenoid_init();
 	
-	motor_calib();
 	
 	
 	//CAN message
@@ -52,49 +51,35 @@ int main(void)
     while (1) {
 
 		can_receive(&rec, 0);
-		
-		//Print joystick x and y position from node 1
-		itoa((int8_t)rec.data[0], msg_str, 10);
-		//printf("x: %s\t", msg_str);
-			
-		itoa((int8_t)rec.data[1], msg_str, 10);
-		//printf("y: %s\r\n", msg_str);
-		
+				
 		//Control duty cycle with joystick
 		pwm_joystick(&rec, 1);
 		
+		//Control motor with joystick
+		motor_position_joystick(&rec, 0);
 		
-		//Test ADC:
-		//itoa(adc_read(), adc_data, 10);
-		//printf(adc_data);
+		
+		//ADC:
 		adc_last_data= adc_data;
 		adc_data = adc_read();
 		
 		//printf("ADC: %d \r\n", adc_data);
 		
-		//&& (adc_last_data < goal_threshold_falling)
+		//Goal
 		if ((adc_data < goal_threshold_falling)  && score_toggle==0) {
 			score += 1;
 			score_toggle = 1;
 			printf("Goal! current score: %d \r\n", score);
 		}
-		//&& (adc_last_data > goal_threshold_rising)
 		if ((adc_data > goal_threshold_rising)  && score_toggle==1) {
 			score_toggle = 0;
 		}
 		
-		//int8_t dac_data = rec.data[0];
-		//dac_write(dac_data);
-		//printf("DATA0: %d \t", dac_data);
-		
-		int16_t enc_data= read_encoder();
-		//printf("Encoder: %d \r\n", enc_data);
-
-		//motor_position_joystick(&rec, 0);
-		
+		//Hit ball
 		if (rec.data[2] == 1) {
-			printf("Hit");
-			solenoid_hit_bal();
+			PIOA->PIO_CODR = PIO_SODR_P14;	//Set pin 23 high
+		} else {
+			PIOA->PIO_SODR = PIO_CODR_P14;	//Set pin 23 low 
 		}
 	}
 }

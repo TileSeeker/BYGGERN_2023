@@ -1,7 +1,7 @@
 #include "sam_motor.h"
 
-volatile uint16_t encoder_max = 0;
-volatile uint16_t encoder_min = 0;
+#define  encoder_max 1403
+#define encoder_min 0
 
 void motor_init() {
 	PMC->PMC_PCER0 = (PMC_PCER0_PID13 | PMC_PCR_EN);			//Enable parallel I/O controller C
@@ -15,6 +15,14 @@ void motor_init() {
 	PIOD->PIO_SODR = (EN | NOT_RST);										//Motor enable and encoder reset disable
 	PIOD->PIO_CODR = NOT_OE;									//Encoder output enable
 			
+	//Calibrate
+	PIOD->PIO_SODR = DIR;
+	dac_write_raw(0xFF);
+	delay_us(90000);
+	delay_us(90000);
+	delay_us(90000);
+	delay_us(90000);
+	dac_write_raw(0);
 	restart_encoder();
 }
 
@@ -52,19 +60,3 @@ void motor_position_joystick(CAN_MESSAGE* rec, int channel) {
 	dac_write_raw(u);
 }
 
-
-void motor_calib() {
-	//Left
-	PIOD->PIO_CODR |= DIR;
-	dac_write_raw(100);
-	PIOD->PIO_SODR |= DIR;
-	//encoder_max = read_encoder();
-	dac_write_raw(0);
-	printf("encoder: %d \r\n", encoder_max);
-	
-	//Right
-	PIOD->PIO_SODR |= DIR;
-	dac_write_raw(100);
-	delay_us(1000);
-	encoder_min = read_encoder();
-}

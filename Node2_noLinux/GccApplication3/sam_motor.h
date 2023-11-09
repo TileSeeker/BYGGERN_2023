@@ -18,6 +18,6 @@ void motor_init(void);
 int16_t read_encoder(void);
 void restart_encoder(void);
 void motor_position_joystick(CAN_MESSAGE* rec, int channel);
-void motor_calib();
+
 
 #endif

@@ -18,7 +18,7 @@ void dac_init(){
 
 void dac_write_raw(uint16_t data){
 	DACC-> DACC_CDR = (data << 4);
-	printf("DAC_WRITE: %08x \t", data);
+	//printf("DAC_WRITE: %08x \t", data);
 }
 
 void dac_write(int16_t data){
