@@ -30,9 +30,10 @@ int main(void)
 {
 	SystemInit();					//Initialize the SAM system
 	WDT->WDT_MR |= WDT_MR_WDDIS;	//Disable watchdog timer
-	PMC->PMC_WPMR &= ~(0x1);		//WPEN bit clear for PIO write protect mode register 
-	led_init();						
+	PMC->PMC_WPMR &= ~(0x1);		//WPEN bit clear for PIO write protect mode register 					
 	configure_uart();				//Baudrate = master clock / (16 * clock divider) = 84MHz / (16 * 547) = 9600
+	
+	led_init();
 	pwm_init();
 	adc_init();
 	dac_init();
@@ -41,15 +42,14 @@ int main(void)
 	solenoid_init();
 	
 	
-	
-	//CAN message
+	//CAN
 	can_init_def_tx_rx_mb(CAN_BAUDRATE);
 	CAN_MESSAGE rec;
 	char msg_str[10];
 	
 	score_toggle = 0;
     while (1) {
-
+		//Receive CAN message
 		can_receive(&rec, 0);
 				
 		//Control duty cycle with joystick
@@ -58,11 +58,9 @@ int main(void)
 		//Control motor with joystick
 		motor_position_joystick(&rec, 0);
 		
-		
-		//ADC:
+		//ADC
 		adc_last_data= adc_data;
 		adc_data = adc_read();
-		
 		//printf("ADC: %d \r\n", adc_data);
 		
 		//Goal

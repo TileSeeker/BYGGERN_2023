@@ -2,12 +2,13 @@
 #include <avr/io.h>
 #include "MCP2515_lib.h"
 
+
 void joystick_calibrate(void) {
 	x_middle_position = ADC_read(channel_0);
 	y_middle_position = ADC_read(channel_1);
 }
 
-//https://deepbluembedded.com/map-function-embedded-c/
+//MAP function: https://deepbluembedded.com/map-function-embedded-c/
 int MAP(int pos_in, int pos_in_min, int pos_in_max, int pos_out_min, int pos_out_max) {
 	return ((((pos_in - pos_in_min) * (pos_out_max - pos_out_min)) / (pos_in_max - pos_in_min)) + pos_out_min);
 }
@@ -29,7 +30,6 @@ joystick_position joystick_position_read(void) {
 		} else {
 		position.y_pos = MAP(y_pos, y_middle_position, xy_position_max, 0, 100);
 	}
-	
 	//Button_Press Read
 	position.button_press = !((PINB >> PB1) & 1);
 	

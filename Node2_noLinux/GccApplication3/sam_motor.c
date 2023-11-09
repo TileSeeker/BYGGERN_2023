@@ -6,17 +6,17 @@
 void motor_init() {
 	PMC->PMC_PCER0 = (PMC_PCER0_PID13 | PMC_PCR_EN);			//Enable parallel I/O controller C
 	
-	PIOD->PIO_PER = (DIR | EN | NOT_OE | SEL | NOT_RST);					//PIO enable registers
-	PIOD->PIO_OER = (DIR | EN | NOT_OE | SEL | NOT_RST);					//Output enable registers
+	PIOD->PIO_PER = (DIR | EN | NOT_OE | SEL | NOT_RST);		//PIO enable for MJ1 pins
+	PIOD->PIO_OER = (DIR | EN | NOT_OE | SEL | NOT_RST);		//Output enable for MJ1 pins
 	
 	PIOC->PIO_PER = MJ2;
-	PIOC->PIO_ODR = MJ2;										//Output disable register
+	PIOC->PIO_ODR = MJ2;										//Output disable for MJ2 pins
 	
-	PIOD->PIO_SODR = (EN | NOT_RST);										//Motor enable and encoder reset disable
+	PIOD->PIO_SODR = (EN | NOT_RST);							//Motor enable and encoder reset disable
 	PIOD->PIO_CODR = NOT_OE;									//Encoder output enable
 			
-	//Calibrate
-	PIOD->PIO_SODR = DIR;
+	//Calibrate encoder
+	PIOD->PIO_SODR = DIR;										//Motor direction right
 	dac_write_raw(0xFF);
 	delay_us(90000);
 	delay_us(90000);
@@ -51,10 +51,10 @@ void motor_position_joystick(CAN_MESSAGE* rec, int channel) {
 	int16_t ref = MAP((int8_t)rec->data[channel], 100, -100, encoder_min, encoder_max);
 	int16_t u = PI_controller(current, ref);
 	if (current > ref) {
-		//Left
+		//Right
 		PIOD->PIO_SODR = DIR;
 	} else {
-		//Right
+		//Left
 		PIOD->PIO_CODR = DIR;
 	}
 	dac_write_raw(u);
