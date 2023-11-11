@@ -35,14 +35,7 @@ int main(void)
 	oled_reset();
 	oled_set_brigthness(255);
 	
-	can_init();
-	
-// 	can_message_t test = {
-// 		.id = 0,
-// 		.length = 2,
-// 		.data = "ab"
-// 	};
-	
+	can_init();	
 
 	while(1) {	
 		//Menu
@@ -53,6 +46,9 @@ int main(void)
 		//CAN send
 		can_send_joystick();
 		printf("ADC: x: %d\t y: %d\t dir-x: %d\t dir-y: %d \r\n", joystick_position_read().x_pos, joystick_position_read().y_pos, joystick_direction_read().x_dir, joystick_direction_read().y_dir);
+		//printf("x: %d\t y: %d\t \r\n", ADC_read(channel_0), ADC_read(channel_1));
+
+		
 		_delay_ms(100);
 	}
 }

@@ -58,7 +58,7 @@ joystick_direction joystick_direction_read(void) {
 
 void init_joystick_button(void) {
 	DDRB	&= ~(1 << DDB1); //Set pin to INPUT
-	PORTB	|= (1 << PB1);	//Enable internal pull-up
+	PORTB	|= (1 << PB1);	 //Enable internal pull-up
 }
 
 void can_send_joystick() {
@@ -66,7 +66,7 @@ void can_send_joystick() {
 	
 	can_message_t joy_pos = {
 		.id = 0,
-		.length = 4,
+		.length = 2,
 		.data[0] = (uint8_t)pos.x_pos,
 		.data[1] = (uint8_t)pos.y_pos
 	};

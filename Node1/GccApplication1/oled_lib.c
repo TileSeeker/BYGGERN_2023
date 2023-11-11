@@ -60,7 +60,6 @@ void oled_reset() {
 	}
 }
 
-	
 void oled_pos(uint8_t row, uint8_t column) {
 	oled_goto_line(row);
 	oled_goto_column(column);
