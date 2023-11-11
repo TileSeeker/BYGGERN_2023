@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "sam_dac.h"
+#include "sam_motor.h"
+#include "sam_solenoid.h"
 
 
 //MCK = 84MHz & CAN baud rate = 125kbit/s
@@ -16,67 +18,67 @@
 // -> 0b 00000000 00101001 00000001 01100101 -> 0x290165
 #define CAN_BAUDRATE 0x0290165
 
-#define goal_threshold_falling 300
-#define goal_threshold_rising 1000
+#define goal_threshold_falling 1000
+#define goal_threshold_rising 2000
 volatile uint8_t score = 0;
 volatile uint16_t adc_last_data;
 volatile uint16_t adc_data;
 volatile bool score_toggle;
 
 
-
 int main(void)
 {
 	SystemInit();					//Initialize the SAM system
 	WDT->WDT_MR |= WDT_MR_WDDIS;	//Disable watchdog timer
-	PMC->PMC_WPMR &= ~(0x1);		//WPEN bit clear for PIO write protect mode register 
-	led_init();						
+	PMC->PMC_WPMR &= ~(0x1);		//WPEN bit clear for PIO write protect mode register 					
 	configure_uart();				//Baudrate = master clock / (16 * clock divider) = 84MHz / (16 * 547) = 9600
+	
+	led_init();
 	pwm_init();
 	adc_init();
 	dac_init();
+	sysTick_init();
+	motor_init();
+	solenoid_init();
 	
-	//CAN message
+	
+	//CAN
 	can_init_def_tx_rx_mb(CAN_BAUDRATE);
 	CAN_MESSAGE rec;
 	char msg_str[10];
+	
 	score_toggle = 0;
     while (1) {
-
+		//Receive CAN message
 		can_receive(&rec, 0);
-		
-		//Print joystick x and y position from node 1
-		itoa((int8_t)rec.data[0], msg_str, 10);
-		//printf("x: %s\t", msg_str);
-			
-		itoa((int8_t)rec.data[1], msg_str, 10);
-		//printf("y: %s\r\n", msg_str);
-		
+				
 		//Control duty cycle with joystick
 		pwm_joystick(&rec, 1);
 		
+		//Control motor with joystick
+		motor_position_joystick(&rec, 0);
 		
-		//Test ADC:
-		//itoa(adc_read(), adc_data, 10);
-		//printf(adc_data);
+		//ADC
 		adc_last_data= adc_data;
 		adc_data = adc_read();
-		
 		//printf("ADC: %d \r\n", adc_data);
 		
-		//&& (adc_last_data < goal_threshold_falling)
+		//Goal
 		if ((adc_data < goal_threshold_falling)  && score_toggle==0) {
 			score += 1;
 			score_toggle = 1;
 			printf("Goal! current score: %d \r\n", score);
 		}
-		//&& (adc_last_data > goal_threshold_rising)
 		if ((adc_data > goal_threshold_rising)  && score_toggle==1) {
 			score_toggle = 0;
 		}
 		
-		dac_write((int8_t)rec.data[0]);
-		printf("DATA0: %d \r\n", (int8_t)rec.data[0]);
+		//Hit ball
+		if (rec.data[2] == 1) {
+			PIOA->PIO_CODR = PIO_SODR_P14;	//Set pin 23 high
+		} else {
+			PIOA->PIO_SODR = PIO_CODR_P14;	//Set pin 23 low 
+		}
 	}
 }
 

@@ -30,15 +30,15 @@
     <EraseKey />
     <AsfFrameworkConfig>
       <framework-data>
-  <options />
-  <configurations />
-  <files />
-  <documentation help="" />
-  <offline-documentation help="" />
-  <dependencies>
-    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.42.0" />
-  </dependencies>
-</framework-data>
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.44.1" />
+        </dependencies>
+      </framework-data>
     </AsfFrameworkConfig>
     <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
     <avrtoolserialnumber>J42700040791</avrtoolserialnumber>
@@ -210,16 +210,40 @@
     <Compile Include="sam_dac.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="sam_delay.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sam_delay.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="sam_led.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="sam_led.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="sam_motor.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sam_motor.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sam_pi_controller.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sam_pi_controller.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="sam_pwm.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="sam_pwm.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sam_solenoid.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sam_solenoid.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="uart.c">

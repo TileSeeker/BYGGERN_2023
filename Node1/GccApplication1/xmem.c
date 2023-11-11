@@ -18,6 +18,7 @@ uint8_t XMEM_read(uint16_t addr) {
 	return ret_val;
 }
 
+//lab forelesning powerpoint
 void SRAM_test(void) {
 	volatile char *ext_ram = (char *) 0x1800; // Start address for the SRAM
 	uint16_t ext_ram_size = 0x800;

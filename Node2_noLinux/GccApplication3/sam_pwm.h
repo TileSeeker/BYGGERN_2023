@@ -1,6 +1,8 @@
 #ifndef SAM_PWM_H
 #define SAM_PWM_H
+
 #include "sam.h"
+#include <stdint.h>
 #include "can_controller.h"
 
 void pwm_init(void);

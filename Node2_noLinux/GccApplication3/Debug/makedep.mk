@@ -18,9 +18,17 @@ sam_adc.c
 
 sam_dac.c
 
+sam_delay.c
+
 sam_led.c
 
+sam_motor.c
+
+sam_pi_controller.c
+
 sam_pwm.c
+
+sam_solenoid.c
 
 uart.c
 
